@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NumberRecognizer
+namespace NumberRecognizerDesktop
 {
-    class NeuralNetwork
+    class NeuralNetworkMNIST
     {
         int inputLayerSize = 784;
         int hiddenLayerSize = 15;
@@ -18,7 +18,7 @@ namespace NumberRecognizer
 
         double eta;
 
-        public NeuralNetwork(double learningRateEta)
+        public NeuralNetworkMNIST(double learningRateEta)
         {
             eta = learningRateEta;
             inputs = new double[inputLayerSize];
@@ -30,17 +30,14 @@ namespace NumberRecognizer
                 outputLayer[i] = new Neuron(hiddenLayerSize);
         }
 
-        public NeuralNetwork() : this(3.0)
-        {   }
-
         public double GetLearningRateEta()
         {
             return eta;
         }
 
-        public int Recognize(CharacterImage image)
+        public int Recognize(CharacterImageMNIST image)
         {
-            inputs = image.GetNormalizedPixels();
+            inputs = image.NormalizedPixels;
 
             double[] hiddenLayerOutputs = new double[hiddenLayer.Length];
             for (int i = 0; i < hiddenLayer.Length; i++)
@@ -56,13 +53,13 @@ namespace NumberRecognizer
         }
 
 
-        public void Train(List<CharacterImage> dataset)
+        public void Train(List<CharacterImageMNIST> dataset)
         {
-            foreach(CharacterImage image in dataset)
+            foreach (CharacterImageMNIST image in dataset)
             {
                 //Desired output is neuron corresponding to the digit label outputs 1.0, the rest outputs 0.0.
                 double[] desiredOutputs = new double[outputLayerSize];
-                desiredOutputs[(int)char.GetNumericValue(image.GetLabel())] = 1.0;
+                desiredOutputs[(int)char.GetNumericValue(image.Label)] = 1.0;
 
                 //Run image through the neural network.
                 Recognize(image);

@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NumberRecognizer
+namespace NumberRecognizerDesktop
 {
-
-
     public class Neuron
     {
         //Weight concerning activation threshold.
@@ -34,7 +32,7 @@ namespace NumberRecognizer
             //Initialize weights.
             for (int i = 0; i < weights.Length; i++)
             {
-                u1 = 1.0 - rand.NextDouble(); 
+                u1 = 1.0 - rand.NextDouble();
                 u2 = 1.0 - rand.NextDouble();
                 weights[i] = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
             }

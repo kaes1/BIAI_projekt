@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NumberRecognizer")]
+[assembly: AssemblyTitle("NumberRecognizerDesktop")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NumberRecognizer")]
+[assembly: AssemblyProduct("NumberRecognizerDesktop")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5819c8eb-58cb-4647-879d-787a3b217436")]
+[assembly: Guid("395394ba-8989-4cb7-8fd8-fba4b0fe1d40")]
 
 // Version information for an assembly consists of the following four values:
 //
