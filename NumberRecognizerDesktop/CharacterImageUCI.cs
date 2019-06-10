@@ -11,7 +11,7 @@ namespace NumberRecognizerDesktop
         string fontFamily;
         string fontVariant;
         float strength;
-        bool italic;
+        public bool italic { get; }
         float orientation;
         int m_top;
         int m_left;
@@ -58,11 +58,6 @@ namespace NumberRecognizerDesktop
         public string GetFontVariant()
         {
             return fontVariant;
-        }
-
-        public bool GetItalic()
-        {
-            return italic;
         }
 
     }

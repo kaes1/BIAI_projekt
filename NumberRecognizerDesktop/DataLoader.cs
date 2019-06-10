@@ -85,7 +85,7 @@ namespace NumberRecognizerDesktop
             var uciSets = new List<List<CharacterImageUCI>>();
             foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
             {
-                if (fileName.EndsWith("ROMAN.csv") || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
+                if (fileName.EndsWith("ROMAN.csv"))// || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
                 {
                     var dataset = new List<CharacterImageUCI>();
                     using (var reader = new StreamReader(fileName))
@@ -98,7 +98,7 @@ namespace NumberRecognizerDesktop
                             var line = reader.ReadLine();
                             var values = line.Split(',');
                             CharacterImageUCI newImage = new CharacterImageUCI(values);
-                            if (newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z')
+                            if ((newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z') && !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED"))
                                 dataset.Add(newImage);
                         }
                     }
@@ -106,6 +106,26 @@ namespace NumberRecognizerDesktop
                 }
             }
             return uciSets;
+        }
+
+        public static CharacterImage LoadFromBMP(string filePath)
+        {
+            CharacterImage characterImage = null;
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(filePath);
+            if (bmp != null)
+            {
+                int[] pixels = new int[bmp.Width * bmp.Height];
+                for (int y = 0; y < bmp.Height; y++)
+                    for (int x = 0; x < bmp.Width; x++)
+                    {
+                        System.Drawing.Color pixelColor = bmp.GetPixel(x, y);
+                        int grayscaleValue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        pixels[y * bmp.Width + x] = grayscaleValue;
+                    }
+                characterImage = new CharacterImage(bmp.Width, bmp.Height, 'Z', pixels);
+                bmp.Dispose();
+            }
+            return characterImage;
         }
     }
 }

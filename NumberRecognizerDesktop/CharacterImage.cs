@@ -17,5 +17,25 @@ namespace NumberRecognizerDesktop
         public int[] Pixels { get; internal set; }
         //Normalized pixels values 0.0 - 1.0.
         public double[] NormalizedPixels { get; internal set; }
+
+        public CharacterImage()
+        {
+
+        }
+
+        public CharacterImage(int width, int height, char label, int[] pixels)
+        {
+            Width = width;
+            Height = height;
+            NumberOfPixels = width * height;
+            Label = label;
+            Pixels = new int[NumberOfPixels];
+            NormalizedPixels = new double[NumberOfPixels];
+            for (int i = 0; i < NumberOfPixels; i++)
+            {
+                Pixels[i] = pixels[i];
+                NormalizedPixels[i] = Pixels[i] / 255.0;
+            }
+        }
     }
 }
