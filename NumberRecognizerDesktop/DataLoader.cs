@@ -9,7 +9,8 @@ namespace NumberRecognizerDesktop
 {
     public static class DataLoader
     {
-        public static List<CharacterImageMNIST> LoadFromFileCSV_MNIST(string filePath)
+        
+        /*public static List<CharacterImageMNIST> LoadFromFileCSV_MNIST(string filePath)
         {
             var dataset = new List<CharacterImageMNIST>();
             //Read csv.
@@ -28,10 +29,10 @@ namespace NumberRecognizerDesktop
             }
 
             return dataset;
-        }
+        }*/
 
 
-        public static List<List<CharacterImageUCI>> LoadFromFolderCSV_UCI(string folderPath)
+        /*public static List<List<CharacterImageUCI>> LoadFromFolderCSV_UCI(string folderPath)
         {
             var uciSets = new List<List<CharacterImageUCI>>();
 
@@ -77,7 +78,34 @@ namespace NumberRecognizerDesktop
             }
 
             return uciSets;
-        }
+        }*/
 
+        public static List<List<CharacterImageUCI>> LoadUciCsv(string folderPath)
+        {
+            var uciSets = new List<List<CharacterImageUCI>>();
+            foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
+            {
+                if (fileName.EndsWith("ROMAN.csv") || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
+                {
+                    var dataset = new List<CharacterImageUCI>();
+                    using (var reader = new StreamReader(fileName))
+                    {
+                        //Skip first line of csv.
+                        var firstline = reader.ReadLine();
+                        //Read the rest of csv, create image for each line and add to images list.
+                        while (!reader.EndOfStream)
+                        {
+                            var line = reader.ReadLine();
+                            var values = line.Split(',');
+                            CharacterImageUCI newImage = new CharacterImageUCI(values);
+                            if (newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z')
+                                dataset.Add(newImage);
+                        }
+                    }
+                    uciSets.Add(dataset);
+                }
+            }
+            return uciSets;
+        }
     }
 }

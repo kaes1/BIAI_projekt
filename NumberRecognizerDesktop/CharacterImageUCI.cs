@@ -59,5 +59,11 @@ namespace NumberRecognizerDesktop
         {
             return fontVariant;
         }
+
+        public bool GetItalic()
+        {
+            return italic;
+        }
+
     }
 }
