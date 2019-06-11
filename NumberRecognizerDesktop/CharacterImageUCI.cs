@@ -10,7 +10,7 @@ namespace NumberRecognizerDesktop
     {
         string fontFamily;
         string fontVariant;
-        float strength;
+        public float strength { get; }
         public bool italic { get; }
         float orientation;
         int m_top;

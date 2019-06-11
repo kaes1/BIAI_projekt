@@ -24,32 +24,16 @@ namespace NumberRecognizerDesktop
 
             //Create networks.
             neuralNetworks = new List<NeuralNetworkUCI>();
-            neuralNetworks.Add(new NeuralNetworkUCI(3.0, 30));
-            //neuralNetworks.Add(new NeuralNetworkUCI(3.0, 75));
-            //neuralNetworks.Add(new NeuralNetworkUCI(3.0, 100));
-            //neuralNetworks.Add(new NeuralNetworkUCI(3.0, 150));
-            //neuralNetworks.Add(new NeuralNetworkUCI(1.0, 30));
-            //neuralNetworks.Add(new NeuralNetworkUCI(1.0, 75));
-            //neuralNetworks.Add(new NeuralNetworkUCI(1.0, 100));
-            //neuralNetworks.Add(new NeuralNetworkUCI(1.0, 150));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 30));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 75));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 100));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 150));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.05, 30));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.05, 75));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.05, 100));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.05, 150));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.04, 30));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.04, 75));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.04, 100));
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.04, 150));
+            neuralNetworks.Add(new NeuralNetworkUCI(0.1, 40));
+            neuralNetworks.Add(new NeuralNetworkUCI(1.0, 40));
+            neuralNetworks.Add(new NeuralNetworkUCI(3.0, 40));
+
 
             //Train networks.
-            //trainNeuralNetworks();
+            trainNeuralNetworks();
 
             //Test networks
-            //testNeuralNetworks();
+            testNeuralNetworks();
 
             //Setup GUI
             List<string> fontNames = new List<string>();
@@ -58,8 +42,8 @@ namespace NumberRecognizerDesktop
             comboBoxFonts.DataSource = fontNames;
 
             //Test image loading
-            testMyImage = DataLoader.LoadFromBMP(@"G:\TEST_PIC.bmp");
-            displayTestCharacter(testMyImage);
+            //testMyImage = DataLoader.LoadFromBMP(@"G:\TEST_PIC.bmp");
+            //displayTestCharacter(testMyImage);
 
         }
 
@@ -72,10 +56,10 @@ namespace NumberRecognizerDesktop
                     nn.Train(dataset);
                     nn.Train(dataset);
                     nn.Train(dataset);
-                    nn.Train(dataset);
-                    nn.Train(dataset);
-                    nn.Train(dataset);
-                    nn.Train(dataset);
+                    //nn.Train(dataset);
+                    //nn.Train(dataset);
+                    //nn.Train(dataset);
+                    //nn.Train(dataset);
                 }
         }
 
@@ -129,6 +113,8 @@ namespace NumberRecognizerDesktop
                 textBoxSelectedCharacterInfo.AppendText("FontVariant = " + DataSets[fontNumber][characterNumber].GetFontVariant() + "\r\n");
                 textBoxSelectedCharacterInfo.AppendText("NumberOfCharacters = " + DataSets[fontNumber].Count + "\r\n");
                 textBoxSelectedCharacterInfo.AppendText("Label = " + DataSets[fontNumber][characterNumber].Label + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("Italic = " + DataSets[fontNumber][characterNumber].italic + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("Strength = " + DataSets[fontNumber][characterNumber].strength + "\r\n");
 
                 textBoxRecognized.Text = "Results for all neural networks:\r\n";
                 foreach(NeuralNetworkUCI nn in neuralNetworks)

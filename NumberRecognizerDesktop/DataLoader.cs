@@ -85,7 +85,7 @@ namespace NumberRecognizerDesktop
             var uciSets = new List<List<CharacterImageUCI>>();
             foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
             {
-                if (fileName.EndsWith("ROMAN.csv"))// || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
+                if (fileName.EndsWith("ROMAN.csv") || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
                 {
                     var dataset = new List<CharacterImageUCI>();
                     using (var reader = new StreamReader(fileName))
@@ -98,7 +98,7 @@ namespace NumberRecognizerDesktop
                             var line = reader.ReadLine();
                             var values = line.Split(',');
                             CharacterImageUCI newImage = new CharacterImageUCI(values);
-                            if ((newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z') && !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED"))
+                            if ((newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z'))// && !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED"))
                                 dataset.Add(newImage);
                         }
                     }
