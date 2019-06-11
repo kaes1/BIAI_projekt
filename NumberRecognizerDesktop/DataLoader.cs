@@ -9,7 +9,11 @@ namespace NumberRecognizerDesktop
 {
     public static class DataLoader
     {
-        
+
+        private static readonly String[] enabledCSV = {"ROMAN.csv", "ARIAL.csv", "WIDE.csv", "STENCIL.csv"};
+
+        private static List<List<CharacterImageUCI>> datasetsUciByFonts; 
+
         /*public static List<CharacterImageMNIST> LoadFromFileCSV_MNIST(string filePath)
         {
             var dataset = new List<CharacterImageMNIST>();
@@ -80,12 +84,24 @@ namespace NumberRecognizerDesktop
             return uciSets;
         }*/
 
-        public static List<List<CharacterImageUCI>> LoadUciCsv(string folderPath)
+        public static List<CharacterImageUCI> LoadUciCsv(string folderPath)
+        {
+            var setsByFonts = LoadUciCsvByFonts(folderPath);
+            var characterImages = new List<CharacterImageUCI>();
+            foreach (List<CharacterImageUCI> set in setsByFonts)
+                foreach (CharacterImageUCI characterImage in set)
+                    characterImages.Add(characterImage);
+
+            return characterImages;
+        }
+
+
+        public static List<List<CharacterImageUCI>> LoadUciCsvByFonts(string folderPath)
         {
             var uciSets = new List<List<CharacterImageUCI>>();
             foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
             {
-                if (fileName.EndsWith("ROMAN.csv") || fileName.EndsWith("ARIAL.csv") || fileName.EndsWith("WIDE.csv") || fileName.EndsWith("STENCIL.csv"))
+                if (enabledCSV.Any(enabledName => fileName.EndsWith(enabledName))) 
                 {
                     var dataset = new List<CharacterImageUCI>();
                     using (var reader = new StreamReader(fileName))
@@ -98,7 +114,7 @@ namespace NumberRecognizerDesktop
                             var line = reader.ReadLine();
                             var values = line.Split(',');
                             CharacterImageUCI newImage = new CharacterImageUCI(values);
-                            if ((newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z'))// && !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED"))
+                            if ((newImage.Label >= '0' && newImage.Label <= '9' /*|| newImage.Label >= 'A' && newImage.Label <= 'Z'*/) /*&& !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED")*/)
                                 dataset.Add(newImage);
                         }
                     }

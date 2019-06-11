@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -9,24 +10,41 @@ namespace NumberRecognizerDesktop
 {
     public partial class MainForm : Form
     {
-        List<List<CharacterImageUCI>> DataSets;
+        List<List<CharacterImageUCI>> DataSetsByFonts;
+        List<CharacterImageUCI> DataSet;
         List<NeuralNetworkUCI> neuralNetworks;
-
+        List<NeuralNetworkDigits> neuralNetworksDigits;
         //Test image
-        CharacterImage testMyImage;
+        //CharacterImage testMyImage;
 
         public MainForm()
         {
             InitializeComponent();
 
             //Load data.
-            DataSets = DataLoader.LoadUciCsv(@"G:\Studia\BIAI\UCI");
+            DataSetsByFonts = DataLoader.LoadUciCsvByFonts(@"C:\Users\Aleksandra\Documents\GitHub\fonts");
+            DataSet = new List<CharacterImageUCI>();
+            foreach (List<CharacterImageUCI> set in DataSetsByFonts)
+                foreach (CharacterImageUCI characterImage in set)
+                    DataSet.Add(characterImage);
+
+            //Get data statistics.
+            var g = DataSet.GroupBy(characterImage => characterImage.Label);
+            
+
+            textBoxDataSetStatistics.Text = "DataSet Statistics.\r\n";
+            foreach (var grp in g)
+            {
+                //Console.WriteLine("{0} {1}", grp.Key, grp.Count());
+                textBoxDataSetStatistics.AppendText(grp.Key + " " + grp.Count() + "\r\n");
+            }
+            
 
             //Create networks.
-            neuralNetworks = new List<NeuralNetworkUCI>();
-            neuralNetworks.Add(new NeuralNetworkUCI(0.1, 40));
-            neuralNetworks.Add(new NeuralNetworkUCI(1.0, 40));
-            neuralNetworks.Add(new NeuralNetworkUCI(3.0, 40));
+            //neuralNetworks = new List<NeuralNetworkUCI>();
+            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 20));
+            neuralNetworksDigits = new List<NeuralNetworkDigits>();
+            neuralNetworksDigits.Add(new NeuralNetworkDigits(0.1, 20));
 
 
             //Train networks.
@@ -37,7 +55,7 @@ namespace NumberRecognizerDesktop
 
             //Setup GUI
             List<string> fontNames = new List<string>();
-            foreach(var dataset in DataSets)
+            foreach(var dataset in DataSetsByFonts)
                 fontNames.Add(dataset[0].GetFontFamily());
             comboBoxFonts.DataSource = fontNames;
 
@@ -50,28 +68,52 @@ namespace NumberRecognizerDesktop
 
         private void trainNeuralNetworks()
         {
-            foreach (NeuralNetworkUCI nn in neuralNetworks)
-                foreach (var dataset in DataSets)
-                {
-                    nn.Train(dataset);
-                    nn.Train(dataset);
-                    nn.Train(dataset);
-                    //nn.Train(dataset);
-                    //nn.Train(dataset);
-                    //nn.Train(dataset);
-                    //nn.Train(dataset);
-                }
+            //foreach (NeuralNetworkUCI nn in neuralNetworks)
+            //    foreach (var dataset in DataSetsByFonts)
+            //    {
+            //        nn.Train(dataset);
+            //        nn.Train(dataset);
+            //        //nn.Train(dataset);
+            //        //nn.Train(dataset);
+            //        //nn.Train(dataset);
+            //        //nn.Train(dataset);
+            //        //nn.Train(dataset);
+            //    }
+
+            foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
+            {
+                nn.Train(DataSet);
+                nn.Train(DataSet);
+            }
         }
 
         private void testNeuralNetworks()
         {
             textBoxTests.Text = "";
-            foreach (NeuralNetworkUCI nn in neuralNetworks)
+            //foreach (NeuralNetworkUCI nn in neuralNetworks)
+            //{
+            //    int successfulCount = 0;
+            //    int allCount = 0;
+            //    foreach (var dataset in DataSetsByFonts)
+            //        foreach (CharacterImageUCI image in dataset)
+            //        {
+            //            char recognizedLabel = nn.Recognize(image);
+            //            char correctLabel = image.Label;
+            //            allCount++;
+            //            if (recognizedLabel == correctLabel)
+            //                successfulCount++;
+            //        }
+            //    double accuracy = (double)successfulCount / (double)allCount;
+            //    NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+            //    nfi.PercentDecimalDigits = 4;
+            //    textBoxTests.AppendText("Neural Network with hidden neurons = " + nn.GetHiddenLayerSize() + ", eta = " + nn.GetLearningRateEta() + ". Accuracy: " + accuracy.ToString("P", nfi) + "\r\n");
+            //}
+
+            foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
             {
                 int successfulCount = 0;
                 int allCount = 0;
-                foreach (var dataset in DataSets)
-                {
+                foreach (var dataset in DataSetsByFonts)
                     foreach (CharacterImageUCI image in dataset)
                     {
                         char recognizedLabel = nn.Recognize(image);
@@ -80,7 +122,6 @@ namespace NumberRecognizerDesktop
                         if (recognizedLabel == correctLabel)
                             successfulCount++;
                     }
-                }
                 double accuracy = (double)successfulCount / (double)allCount;
                 NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
                 nfi.PercentDecimalDigits = 4;
@@ -105,20 +146,23 @@ namespace NumberRecognizerDesktop
             int fontNumber = comboBoxFonts.SelectedIndex;
             int characterNumber = decimal.ToInt32(numericUpDownCharacters.Value);
 
-            if (DataSets != null && DataSets.Count > fontNumber && DataSets[fontNumber].Count > characterNumber)
+            if (DataSetsByFonts != null && DataSetsByFonts.Count > fontNumber && DataSetsByFonts[fontNumber].Count > characterNumber)
             {
-                numericUpDownCharacters.Maximum = DataSets[fontNumber].Count - 1;
-                displayCharacter(DataSets[fontNumber][characterNumber]);
-                textBoxSelectedCharacterInfo.Text = "FontFamily = " + DataSets[fontNumber][characterNumber].GetFontFamily() + "\r\n";
-                textBoxSelectedCharacterInfo.AppendText("FontVariant = " + DataSets[fontNumber][characterNumber].GetFontVariant() + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("NumberOfCharacters = " + DataSets[fontNumber].Count + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Label = " + DataSets[fontNumber][characterNumber].Label + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Italic = " + DataSets[fontNumber][characterNumber].italic + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Strength = " + DataSets[fontNumber][characterNumber].strength + "\r\n");
+                numericUpDownCharacters.Maximum = DataSetsByFonts[fontNumber].Count - 1;
+                displayCharacter(DataSetsByFonts[fontNumber][characterNumber]);
+                textBoxSelectedCharacterInfo.Text = "FontFamily = " + DataSetsByFonts[fontNumber][characterNumber].GetFontFamily() + "\r\n";
+                textBoxSelectedCharacterInfo.AppendText("FontVariant = " + DataSetsByFonts[fontNumber][characterNumber].GetFontVariant() + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("NumberOfCharacters = " + DataSetsByFonts[fontNumber].Count + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("Label = " + DataSetsByFonts[fontNumber][characterNumber].Label + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("Italic = " + DataSetsByFonts[fontNumber][characterNumber].italic + "\r\n");
+                textBoxSelectedCharacterInfo.AppendText("Strength = " + DataSetsByFonts[fontNumber][characterNumber].strength + "\r\n");
 
                 textBoxRecognized.Text = "Results for all neural networks:\r\n";
-                foreach(NeuralNetworkUCI nn in neuralNetworks)
-                    textBoxRecognized.AppendText("Recognized: " + nn.Recognize(DataSets[fontNumber][characterNumber]) + "\r\n");
+                //foreach(NeuralNetworkUCI nn in neuralNetworks)
+                  //  textBoxRecognized.AppendText("Recognized: " + nn.Recognize(DataSetsByFonts[fontNumber][characterNumber]) + "\r\n");
+                foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
+                    textBoxRecognized.AppendText("Recognized: " + nn.Recognize(DataSetsByFonts[fontNumber][characterNumber]) + "\r\n");
+
             }
             else
             {

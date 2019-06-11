@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace NumberRecognizerDesktop
 {
-    class NeuralNetworkUCI
+    class NeuralNetworkDigits
     {
         int inputLayerSize = 400;
         int hiddenLayerSize;
-        //Output neurons 0-9 represent '0'-'9', neurons 10-35 represent A-Z.
-        int outputLayerSize = 10/*digits*/ + 26/*capital letters*/;
+        //Output neurons 0-9 represent '0'-'9'.
+        int outputLayerSize = 10/*digits*/;
 
         double[] inputs;
         Neuron[] hiddenLayer;
@@ -19,7 +19,7 @@ namespace NumberRecognizerDesktop
 
         double eta;
 
-        public NeuralNetworkUCI(double learningRateEta, int hiddenLayerSize)
+        public NeuralNetworkDigits(double learningRateEta, int hiddenLayerSize)
         {
             eta = learningRateEta;
             this.hiddenLayerSize = hiddenLayerSize;
@@ -58,10 +58,10 @@ namespace NumberRecognizerDesktop
             double max = outputLayerOutputs.Max();
             int mostProbableIndex = Array.IndexOf(outputLayerOutputs, max);
             //Return guessed digit or letter.
-            if (mostProbableIndex < 10)
+            //if (mostProbableIndex < 10)
                 return (char)('0' + mostProbableIndex);
-            else
-                return (char)('A' + mostProbableIndex - 10);
+            //else
+            //    return (char)('A' + mostProbableIndex - 10);
         }
 
         public void Train(List<CharacterImageUCI> dataset)
@@ -70,10 +70,10 @@ namespace NumberRecognizerDesktop
             {
                 //Desired output is neuron corresponding to the digit label outputs 1.0, the rest outputs 0.0.
                 double[] desiredOutputs = new double[outputLayerSize];
-                if (image.Label >= '0' && image.Label <= '9')
+                //if (image.Label >= '0' && image.Label <= '9')
                     desiredOutputs[image.Label - '0'] = 1.0;
-                else if (image.Label >= 'A' && image.Label <= 'Z')
-                    desiredOutputs[image.Label - 'A' + 10] = 1.0;
+                //else if (image.Label >= 'A' && image.Label <= 'Z')
+                //    desiredOutputs[image.Label - 'A' + 10] = 1.0;
 
                 //Run image through the neural network.
                 Recognize(image);

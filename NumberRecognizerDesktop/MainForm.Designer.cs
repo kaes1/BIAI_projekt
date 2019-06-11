@@ -43,6 +43,7 @@ namespace NumberRecognizerDesktop
             this.pictureBoxTest1 = new System.Windows.Forms.PictureBox();
             this.pictureBoxTest4 = new System.Windows.Forms.PictureBox();
             this.pictureBoxTest2 = new System.Windows.Forms.PictureBox();
+            this.textBoxDataSetStatistics = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -56,7 +57,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(101, 384);
+            this.pictureBox2.Location = new System.Drawing.Point(101, 339);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(40, 40);
             this.pictureBox2.TabIndex = 4;
@@ -64,7 +65,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBox4
             // 
-            this.pictureBox4.Location = new System.Drawing.Point(12, 430);
+            this.pictureBox4.Location = new System.Drawing.Point(12, 385);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(160, 160);
             this.pictureBox4.TabIndex = 7;
@@ -72,7 +73,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(152, 404);
+            this.pictureBox1.Location = new System.Drawing.Point(152, 359);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(20, 20);
             this.pictureBox1.TabIndex = 8;
@@ -80,7 +81,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBox3
             // 
-            this.pictureBox3.Location = new System.Drawing.Point(12, 344);
+            this.pictureBox3.Location = new System.Drawing.Point(12, 299);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(80, 80);
             this.pictureBox3.TabIndex = 9;
@@ -100,7 +101,7 @@ namespace NumberRecognizerDesktop
             // 
             this.comboBoxFonts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFonts.FormattingEnabled = true;
-            this.comboBoxFonts.Location = new System.Drawing.Point(15, 263);
+            this.comboBoxFonts.Location = new System.Drawing.Point(15, 218);
             this.comboBoxFonts.Name = "comboBoxFonts";
             this.comboBoxFonts.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFonts.TabIndex = 19;
@@ -109,7 +110,7 @@ namespace NumberRecognizerDesktop
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 247);
+            this.label1.Location = new System.Drawing.Point(12, 202);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 15;
@@ -117,7 +118,7 @@ namespace NumberRecognizerDesktop
             // 
             // numericUpDownCharacters
             // 
-            this.numericUpDownCharacters.Location = new System.Drawing.Point(16, 309);
+            this.numericUpDownCharacters.Location = new System.Drawing.Point(16, 264);
             this.numericUpDownCharacters.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -134,14 +135,14 @@ namespace NumberRecognizerDesktop
             this.textBoxSelectedCharacterInfo.Multiline = true;
             this.textBoxSelectedCharacterInfo.Name = "textBoxSelectedCharacterInfo";
             this.textBoxSelectedCharacterInfo.ReadOnly = true;
-            this.textBoxSelectedCharacterInfo.Size = new System.Drawing.Size(342, 212);
+            this.textBoxSelectedCharacterInfo.Size = new System.Drawing.Size(342, 124);
             this.textBoxSelectedCharacterInfo.TabIndex = 21;
-            this.textBoxSelectedCharacterInfo.Text = "Nothing yet.";
+            this.textBoxSelectedCharacterInfo.Text = "Character information.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 294);
+            this.label2.Location = new System.Drawing.Point(13, 249);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 15;
@@ -153,13 +154,13 @@ namespace NumberRecognizerDesktop
             this.textBoxRecognized.Multiline = true;
             this.textBoxRecognized.Name = "textBoxRecognized";
             this.textBoxRecognized.ReadOnly = true;
-            this.textBoxRecognized.Size = new System.Drawing.Size(454, 255);
+            this.textBoxRecognized.Size = new System.Drawing.Size(454, 348);
             this.textBoxRecognized.TabIndex = 22;
             this.textBoxRecognized.Text = "Nothing yet.";
             // 
             // pictureBoxTest3
             // 
-            this.pictureBoxTest3.Location = new System.Drawing.Point(194, 344);
+            this.pictureBoxTest3.Location = new System.Drawing.Point(194, 299);
             this.pictureBoxTest3.Name = "pictureBoxTest3";
             this.pictureBoxTest3.Size = new System.Drawing.Size(80, 80);
             this.pictureBoxTest3.TabIndex = 26;
@@ -167,7 +168,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBoxTest1
             // 
-            this.pictureBoxTest1.Location = new System.Drawing.Point(334, 404);
+            this.pictureBoxTest1.Location = new System.Drawing.Point(334, 359);
             this.pictureBoxTest1.Name = "pictureBoxTest1";
             this.pictureBoxTest1.Size = new System.Drawing.Size(20, 20);
             this.pictureBoxTest1.TabIndex = 25;
@@ -175,7 +176,7 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBoxTest4
             // 
-            this.pictureBoxTest4.Location = new System.Drawing.Point(194, 430);
+            this.pictureBoxTest4.Location = new System.Drawing.Point(194, 385);
             this.pictureBoxTest4.Name = "pictureBoxTest4";
             this.pictureBoxTest4.Size = new System.Drawing.Size(160, 160);
             this.pictureBoxTest4.TabIndex = 24;
@@ -183,17 +184,28 @@ namespace NumberRecognizerDesktop
             // 
             // pictureBoxTest2
             // 
-            this.pictureBoxTest2.Location = new System.Drawing.Point(283, 384);
+            this.pictureBoxTest2.Location = new System.Drawing.Point(283, 339);
             this.pictureBoxTest2.Name = "pictureBoxTest2";
             this.pictureBoxTest2.Size = new System.Drawing.Size(40, 40);
             this.pictureBoxTest2.TabIndex = 23;
             this.pictureBoxTest2.TabStop = false;
             // 
+            // textBoxDataSetStatistics
+            // 
+            this.textBoxDataSetStatistics.Location = new System.Drawing.Point(820, 12);
+            this.textBoxDataSetStatistics.Multiline = true;
+            this.textBoxDataSetStatistics.Name = "textBoxDataSetStatistics";
+            this.textBoxDataSetStatistics.ReadOnly = true;
+            this.textBoxDataSetStatistics.Size = new System.Drawing.Size(229, 671);
+            this.textBoxDataSetStatistics.TabIndex = 27;
+            this.textBoxDataSetStatistics.Text = "DataSet Statistics";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(826, 602);
+            this.ClientSize = new System.Drawing.Size(1061, 695);
+            this.Controls.Add(this.textBoxDataSetStatistics);
             this.Controls.Add(this.pictureBoxTest3);
             this.Controls.Add(this.pictureBoxTest1);
             this.Controls.Add(this.pictureBoxTest4);
@@ -243,6 +255,7 @@ namespace NumberRecognizerDesktop
         private System.Windows.Forms.PictureBox pictureBoxTest1;
         private System.Windows.Forms.PictureBox pictureBoxTest4;
         private System.Windows.Forms.PictureBox pictureBoxTest2;
+        private System.Windows.Forms.TextBox textBoxDataSetStatistics;
     }
 }
 
