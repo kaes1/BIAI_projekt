@@ -28,10 +28,7 @@ namespace NumberRecognizerDesktop
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxData = new System.Windows.Forms.PictureBox();
             this.textBoxTests = new System.Windows.Forms.TextBox();
             this.comboBoxFonts = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -39,61 +36,38 @@ namespace NumberRecognizerDesktop
             this.textBoxSelectedCharacterInfo = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxRecognized = new System.Windows.Forms.TextBox();
-            this.pictureBoxTest3 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxTest1 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxTest4 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxTest2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxRecognize = new System.Windows.Forms.PictureBox();
             this.textBoxDataSetStatistics = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.buttonRecognize = new System.Windows.Forms.Button();
+            this.groupBoxData = new System.Windows.Forms.GroupBox();
+            this.groupBoxBrowseData = new System.Windows.Forms.GroupBox();
+            this.buttonRecognizeFromData = new System.Windows.Forms.Button();
+            this.groupBoxRecognize = new System.Windows.Forms.GroupBox();
+            this.checkBoxAutoRecognize = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCharacters)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecognize)).BeginInit();
+            this.groupBoxData.SuspendLayout();
+            this.groupBoxBrowseData.SuspendLayout();
+            this.groupBoxRecognize.SuspendLayout();
             this.SuspendLayout();
             // 
-            // pictureBox2
+            // pictureBoxData
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(101, 339);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(40, 40);
-            this.pictureBox2.TabIndex = 4;
-            this.pictureBox2.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.Location = new System.Drawing.Point(12, 385);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(160, 160);
-            this.pictureBox4.TabIndex = 7;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(152, 359);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(20, 20);
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.Location = new System.Drawing.Point(12, 299);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(80, 80);
-            this.pictureBox3.TabIndex = 9;
-            this.pictureBox3.TabStop = false;
+            this.pictureBoxData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxData.Location = new System.Drawing.Point(166, 27);
+            this.pictureBoxData.Name = "pictureBoxData";
+            this.pictureBoxData.Size = new System.Drawing.Size(160, 160);
+            this.pictureBoxData.TabIndex = 7;
+            this.pictureBoxData.TabStop = false;
             // 
             // textBoxTests
             // 
-            this.textBoxTests.Location = new System.Drawing.Point(360, 12);
+            this.textBoxTests.Location = new System.Drawing.Point(6, 19);
             this.textBoxTests.Multiline = true;
             this.textBoxTests.Name = "textBoxTests";
             this.textBoxTests.ReadOnly = true;
-            this.textBoxTests.Size = new System.Drawing.Size(454, 317);
+            this.textBoxTests.Size = new System.Drawing.Size(399, 201);
             this.textBoxTests.TabIndex = 18;
             this.textBoxTests.Text = "Nothing yet.";
             // 
@@ -101,16 +75,16 @@ namespace NumberRecognizerDesktop
             // 
             this.comboBoxFonts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFonts.FormattingEnabled = true;
-            this.comboBoxFonts.Location = new System.Drawing.Point(15, 218);
+            this.comboBoxFonts.Location = new System.Drawing.Point(25, 42);
             this.comboBoxFonts.Name = "comboBoxFonts";
             this.comboBoxFonts.Size = new System.Drawing.Size(121, 21);
             this.comboBoxFonts.TabIndex = 19;
-            this.comboBoxFonts.SelectedIndexChanged += new System.EventHandler(this.SelectedCharacterChanged);
+            this.comboBoxFonts.SelectedIndexChanged += new System.EventHandler(this.comboBoxFonts_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 202);
+            this.label1.Location = new System.Drawing.Point(22, 26);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 15;
@@ -118,7 +92,7 @@ namespace NumberRecognizerDesktop
             // 
             // numericUpDownCharacters
             // 
-            this.numericUpDownCharacters.Location = new System.Drawing.Point(16, 264);
+            this.numericUpDownCharacters.Location = new System.Drawing.Point(25, 81);
             this.numericUpDownCharacters.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -127,22 +101,23 @@ namespace NumberRecognizerDesktop
             this.numericUpDownCharacters.Name = "numericUpDownCharacters";
             this.numericUpDownCharacters.Size = new System.Drawing.Size(120, 20);
             this.numericUpDownCharacters.TabIndex = 20;
-            this.numericUpDownCharacters.ValueChanged += new System.EventHandler(this.SelectedCharacterChanged);
+            this.numericUpDownCharacters.ValueChanged += new System.EventHandler(this.numericUpDownCharacters_ValueChanged);
             // 
             // textBoxSelectedCharacterInfo
             // 
-            this.textBoxSelectedCharacterInfo.Location = new System.Drawing.Point(12, 12);
+            this.textBoxSelectedCharacterInfo.Location = new System.Drawing.Point(10, 200);
             this.textBoxSelectedCharacterInfo.Multiline = true;
             this.textBoxSelectedCharacterInfo.Name = "textBoxSelectedCharacterInfo";
             this.textBoxSelectedCharacterInfo.ReadOnly = true;
-            this.textBoxSelectedCharacterInfo.Size = new System.Drawing.Size(342, 124);
+            this.textBoxSelectedCharacterInfo.Size = new System.Drawing.Size(316, 149);
             this.textBoxSelectedCharacterInfo.TabIndex = 21;
+            this.textBoxSelectedCharacterInfo.TabStop = false;
             this.textBoxSelectedCharacterInfo.Text = "Character information.";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 249);
+            this.label2.Location = new System.Drawing.Point(22, 66);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 15;
@@ -150,100 +125,134 @@ namespace NumberRecognizerDesktop
             // 
             // textBoxRecognized
             // 
-            this.textBoxRecognized.Location = new System.Drawing.Point(360, 335);
+            this.textBoxRecognized.Location = new System.Drawing.Point(6, 253);
             this.textBoxRecognized.Multiline = true;
             this.textBoxRecognized.Name = "textBoxRecognized";
             this.textBoxRecognized.ReadOnly = true;
-            this.textBoxRecognized.Size = new System.Drawing.Size(454, 348);
+            this.textBoxRecognized.Size = new System.Drawing.Size(207, 322);
             this.textBoxRecognized.TabIndex = 22;
             this.textBoxRecognized.Text = "Nothing yet.";
             // 
-            // pictureBoxTest3
+            // pictureBoxRecognize
             // 
-            this.pictureBoxTest3.Location = new System.Drawing.Point(194, 299);
-            this.pictureBoxTest3.Name = "pictureBoxTest3";
-            this.pictureBoxTest3.Size = new System.Drawing.Size(80, 80);
-            this.pictureBoxTest3.TabIndex = 26;
-            this.pictureBoxTest3.TabStop = false;
-            // 
-            // pictureBoxTest1
-            // 
-            this.pictureBoxTest1.Location = new System.Drawing.Point(334, 359);
-            this.pictureBoxTest1.Name = "pictureBoxTest1";
-            this.pictureBoxTest1.Size = new System.Drawing.Size(20, 20);
-            this.pictureBoxTest1.TabIndex = 25;
-            this.pictureBoxTest1.TabStop = false;
-            // 
-            // pictureBoxTest4
-            // 
-            this.pictureBoxTest4.Location = new System.Drawing.Point(194, 385);
-            this.pictureBoxTest4.Name = "pictureBoxTest4";
-            this.pictureBoxTest4.Size = new System.Drawing.Size(160, 160);
-            this.pictureBoxTest4.TabIndex = 24;
-            this.pictureBoxTest4.TabStop = false;
-            // 
-            // pictureBoxTest2
-            // 
-            this.pictureBoxTest2.Location = new System.Drawing.Point(283, 339);
-            this.pictureBoxTest2.Name = "pictureBoxTest2";
-            this.pictureBoxTest2.Size = new System.Drawing.Size(40, 40);
-            this.pictureBoxTest2.TabIndex = 23;
-            this.pictureBoxTest2.TabStop = false;
+            this.pictureBoxRecognize.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxRecognize.Location = new System.Drawing.Point(245, 252);
+            this.pictureBoxRecognize.Name = "pictureBoxRecognize";
+            this.pictureBoxRecognize.Size = new System.Drawing.Size(160, 160);
+            this.pictureBoxRecognize.TabIndex = 24;
+            this.pictureBoxRecognize.TabStop = false;
             // 
             // textBoxDataSetStatistics
             // 
-            this.textBoxDataSetStatistics.Location = new System.Drawing.Point(820, 12);
+            this.textBoxDataSetStatistics.Location = new System.Drawing.Point(6, 19);
             this.textBoxDataSetStatistics.Multiline = true;
             this.textBoxDataSetStatistics.Name = "textBoxDataSetStatistics";
             this.textBoxDataSetStatistics.ReadOnly = true;
-            this.textBoxDataSetStatistics.Size = new System.Drawing.Size(229, 671);
+            this.textBoxDataSetStatistics.Size = new System.Drawing.Size(337, 201);
             this.textBoxDataSetStatistics.TabIndex = 27;
-            this.textBoxDataSetStatistics.Text = "DataSet Statistics";
+            this.textBoxDataSetStatistics.TabStop = false;
+            this.textBoxDataSetStatistics.Text = "Statistics";
+            // 
+            // buttonRecognize
+            // 
+            this.buttonRecognize.Location = new System.Drawing.Point(245, 469);
+            this.buttonRecognize.Name = "buttonRecognize";
+            this.buttonRecognize.Size = new System.Drawing.Size(160, 35);
+            this.buttonRecognize.TabIndex = 28;
+            this.buttonRecognize.Text = "Load Image to Recognize";
+            this.buttonRecognize.UseVisualStyleBackColor = true;
+            this.buttonRecognize.Click += new System.EventHandler(this.buttonRecognize_Click);
+            // 
+            // groupBoxData
+            // 
+            this.groupBoxData.Controls.Add(this.groupBoxBrowseData);
+            this.groupBoxData.Controls.Add(this.textBoxDataSetStatistics);
+            this.groupBoxData.Location = new System.Drawing.Point(12, 12);
+            this.groupBoxData.Name = "groupBoxData";
+            this.groupBoxData.Size = new System.Drawing.Size(354, 590);
+            this.groupBoxData.TabIndex = 29;
+            this.groupBoxData.TabStop = false;
+            this.groupBoxData.Text = "Data";
+            // 
+            // groupBoxBrowseData
+            // 
+            this.groupBoxBrowseData.Controls.Add(this.checkBoxAutoRecognize);
+            this.groupBoxBrowseData.Controls.Add(this.buttonRecognizeFromData);
+            this.groupBoxBrowseData.Controls.Add(this.label1);
+            this.groupBoxBrowseData.Controls.Add(this.numericUpDownCharacters);
+            this.groupBoxBrowseData.Controls.Add(this.textBoxSelectedCharacterInfo);
+            this.groupBoxBrowseData.Controls.Add(this.label2);
+            this.groupBoxBrowseData.Controls.Add(this.pictureBoxData);
+            this.groupBoxBrowseData.Controls.Add(this.comboBoxFonts);
+            this.groupBoxBrowseData.Location = new System.Drawing.Point(6, 226);
+            this.groupBoxBrowseData.Name = "groupBoxBrowseData";
+            this.groupBoxBrowseData.Size = new System.Drawing.Size(337, 358);
+            this.groupBoxBrowseData.TabIndex = 28;
+            this.groupBoxBrowseData.TabStop = false;
+            this.groupBoxBrowseData.Text = "Browse";
+            // 
+            // buttonRecognizeFromData
+            // 
+            this.buttonRecognizeFromData.Location = new System.Drawing.Point(25, 128);
+            this.buttonRecognizeFromData.Name = "buttonRecognizeFromData";
+            this.buttonRecognizeFromData.Size = new System.Drawing.Size(126, 35);
+            this.buttonRecognizeFromData.TabIndex = 0;
+            this.buttonRecognizeFromData.Text = "Recognize This Image";
+            this.buttonRecognizeFromData.UseVisualStyleBackColor = true;
+            this.buttonRecognizeFromData.Click += new System.EventHandler(this.buttonRecognizeFromData_Click);
+            // 
+            // groupBoxRecognize
+            // 
+            this.groupBoxRecognize.Controls.Add(this.buttonRecognize);
+            this.groupBoxRecognize.Controls.Add(this.textBoxRecognized);
+            this.groupBoxRecognize.Controls.Add(this.pictureBoxRecognize);
+            this.groupBoxRecognize.Controls.Add(this.textBoxTests);
+            this.groupBoxRecognize.Location = new System.Drawing.Point(372, 12);
+            this.groupBoxRecognize.Name = "groupBoxRecognize";
+            this.groupBoxRecognize.Size = new System.Drawing.Size(411, 590);
+            this.groupBoxRecognize.TabIndex = 30;
+            this.groupBoxRecognize.TabStop = false;
+            this.groupBoxRecognize.Text = "Recognize";
+            // 
+            // checkBoxAutoRecognize
+            // 
+            this.checkBoxAutoRecognize.AutoSize = true;
+            this.checkBoxAutoRecognize.Checked = true;
+            this.checkBoxAutoRecognize.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxAutoRecognize.Location = new System.Drawing.Point(35, 170);
+            this.checkBoxAutoRecognize.Name = "checkBoxAutoRecognize";
+            this.checkBoxAutoRecognize.Size = new System.Drawing.Size(102, 17);
+            this.checkBoxAutoRecognize.TabIndex = 22;
+            this.checkBoxAutoRecognize.Text = "Auto Recognize";
+            this.checkBoxAutoRecognize.UseVisualStyleBackColor = true;
+            this.checkBoxAutoRecognize.CheckedChanged += new System.EventHandler(this.checkBoxAutoRecognize_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1061, 695);
-            this.Controls.Add(this.textBoxDataSetStatistics);
-            this.Controls.Add(this.pictureBoxTest3);
-            this.Controls.Add(this.pictureBoxTest1);
-            this.Controls.Add(this.pictureBoxTest4);
-            this.Controls.Add(this.pictureBoxTest2);
-            this.Controls.Add(this.textBoxRecognized);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBoxSelectedCharacterInfo);
-            this.Controls.Add(this.numericUpDownCharacters);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBoxFonts);
-            this.Controls.Add(this.textBoxTests);
-            this.Controls.Add(this.pictureBox3);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pictureBox4);
-            this.Controls.Add(this.pictureBox2);
+            this.ClientSize = new System.Drawing.Size(794, 614);
+            this.Controls.Add(this.groupBoxRecognize);
+            this.Controls.Add(this.groupBoxData);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCharacters)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTest2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxRecognize)).EndInit();
+            this.groupBoxData.ResumeLayout(false);
+            this.groupBoxData.PerformLayout();
+            this.groupBoxBrowseData.ResumeLayout(false);
+            this.groupBoxBrowseData.PerformLayout();
+            this.groupBoxRecognize.ResumeLayout(false);
+            this.groupBoxRecognize.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBoxData;
         private System.Windows.Forms.TextBox textBoxTests;
         private System.Windows.Forms.ComboBox comboBoxFonts;
         private System.Windows.Forms.Label label1;
@@ -251,11 +260,14 @@ namespace NumberRecognizerDesktop
         private System.Windows.Forms.TextBox textBoxSelectedCharacterInfo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxRecognized;
-        private System.Windows.Forms.PictureBox pictureBoxTest3;
-        private System.Windows.Forms.PictureBox pictureBoxTest1;
-        private System.Windows.Forms.PictureBox pictureBoxTest4;
-        private System.Windows.Forms.PictureBox pictureBoxTest2;
+        private System.Windows.Forms.PictureBox pictureBoxRecognize;
         private System.Windows.Forms.TextBox textBoxDataSetStatistics;
+        private System.Windows.Forms.Button buttonRecognize;
+        private System.Windows.Forms.GroupBox groupBoxData;
+        private System.Windows.Forms.GroupBox groupBoxRecognize;
+        private System.Windows.Forms.GroupBox groupBoxBrowseData;
+        private System.Windows.Forms.Button buttonRecognizeFromData;
+        private System.Windows.Forms.CheckBox checkBoxAutoRecognize;
     }
 }
 

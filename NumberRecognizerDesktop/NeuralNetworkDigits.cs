@@ -6,18 +6,15 @@ using System.Threading.Tasks;
 
 namespace NumberRecognizerDesktop
 {
-    class NeuralNetworkDigits
+    class NeuralNetworkDigits : NeuralNetwork
     {
         int inputLayerSize = 400;
-        int hiddenLayerSize;
         //Output neurons 0-9 represent '0'-'9'.
         int outputLayerSize = 10/*digits*/;
 
         double[] inputs;
         Neuron[] hiddenLayer;
         Neuron[] outputLayer;
-
-        double eta;
 
         public NeuralNetworkDigits(double learningRateEta, int hiddenLayerSize)
         {
@@ -32,17 +29,8 @@ namespace NumberRecognizerDesktop
                 outputLayer[i] = new Neuron(hiddenLayerSize);
         }
 
-        public double GetLearningRateEta()
-        {
-            return eta;
-        }
 
-        public int GetHiddenLayerSize()
-        {
-            return hiddenLayerSize;
-        }
-
-        public char Recognize(CharacterImageUCI image)
+        override public char Recognize(CharacterImage image)
         {
             inputs = image.NormalizedPixels;
 
@@ -64,16 +52,14 @@ namespace NumberRecognizerDesktop
             //    return (char)('A' + mostProbableIndex - 10);
         }
 
-        public void Train(List<CharacterImageUCI> dataset)
+        override public void Train(List<CharacterImage> dataset)
         {
-            foreach (CharacterImageUCI image in dataset)
+            foreach (CharacterImage image in dataset)
             {
                 //Desired output is neuron corresponding to the digit label outputs 1.0, the rest outputs 0.0.
                 double[] desiredOutputs = new double[outputLayerSize];
-                //if (image.Label >= '0' && image.Label <= '9')
+                if (image.Label >= '0' && image.Label <= '9')
                     desiredOutputs[image.Label - '0'] = 1.0;
-                //else if (image.Label >= 'A' && image.Label <= 'Z')
-                //    desiredOutputs[image.Label - 'A' + 10] = 1.0;
 
                 //Run image through the neural network.
                 Recognize(image);

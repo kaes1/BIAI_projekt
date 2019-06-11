@@ -10,123 +10,77 @@ namespace NumberRecognizerDesktop
 {
     public partial class MainForm : Form
     {
-        List<List<CharacterImageUCI>> DataSetsByFonts;
-        List<CharacterImageUCI> DataSet;
-        List<NeuralNetworkUCI> neuralNetworks;
-        List<NeuralNetworkDigits> neuralNetworksDigits;
-        //Test image
-        //CharacterImage testMyImage;
+        List<NeuralNetwork> neuralNetworks;
+        DataSet dataSet;
+
+        CharacterImage imageActiveInData;
+        //CharacterImage imageActiveInRecognize;
 
         public MainForm()
         {
             InitializeComponent();
 
             //Load data.
-            DataSetsByFonts = DataLoader.LoadUciCsvByFonts(@"C:\Users\Aleksandra\Documents\GitHub\fonts");
-            DataSet = new List<CharacterImageUCI>();
-            foreach (List<CharacterImageUCI> set in DataSetsByFonts)
-                foreach (CharacterImageUCI characterImage in set)
-                    DataSet.Add(characterImage);
-
-            //Get data statistics.
-            var g = DataSet.GroupBy(characterImage => characterImage.Label);
-            
-
-            textBoxDataSetStatistics.Text = "DataSet Statistics.\r\n";
-            foreach (var grp in g)
-            {
-                //Console.WriteLine("{0} {1}", grp.Key, grp.Count());
-                textBoxDataSetStatistics.AppendText(grp.Key + " " + grp.Count() + "\r\n");
-            }
-            
+            dataSet = DataLoader.LoadDataSetLetters(@"G:\Studia\BIAI\UCI");
+            //Display data statistics.
+            string stats = "Total count: " + dataSet.Images.Count + ", Distinct characters: " + dataSet.ImagesByCharacter.Count + "\r\n\r\n";
+            foreach(KeyValuePair<char, List<CharacterImage>> pair in dataSet.ImagesByCharacter)
+                stats += pair.Key + ": " + pair.Value.Count + "\t";
+            textBoxDataSetStatistics.Text = stats;
+            //Setup font selection combo box.
+            comboBoxFonts.DataSource = new List<string>(dataSet.ImagesByFontFamily.Keys);
 
             //Create networks.
-            //neuralNetworks = new List<NeuralNetworkUCI>();
-            //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 20));
-            neuralNetworksDigits = new List<NeuralNetworkDigits>();
-            neuralNetworksDigits.Add(new NeuralNetworkDigits(0.1, 20));
-
-
+            neuralNetworks = new List<NeuralNetwork>();
+            neuralNetworks.Add(new NeuralNetworkUCI(0.1, 20));
+            neuralNetworks.Add(new NeuralNetworkUCI(0.1, 40));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 20));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 40));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 60));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 80));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 100));
             //Train networks.
             trainNeuralNetworks();
-
             //Test networks
-            testNeuralNetworks();
-
-            //Setup GUI
-            List<string> fontNames = new List<string>();
-            foreach(var dataset in DataSetsByFonts)
-                fontNames.Add(dataset[0].GetFontFamily());
-            comboBoxFonts.DataSource = fontNames;
-
-            //Test image loading
-            //testMyImage = DataLoader.LoadFromBMP(@"G:\TEST_PIC.bmp");
-            //displayTestCharacter(testMyImage);
-
+            testNeuralNetworks(); 
         }
 
 
         private void trainNeuralNetworks()
         {
-            //foreach (NeuralNetworkUCI nn in neuralNetworks)
-            //    foreach (var dataset in DataSetsByFonts)
-            //    {
-            //        nn.Train(dataset);
-            //        nn.Train(dataset);
-            //        //nn.Train(dataset);
-            //        //nn.Train(dataset);
-            //        //nn.Train(dataset);
-            //        //nn.Train(dataset);
-            //        //nn.Train(dataset);
-            //    }
-
-            foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
+            foreach (NeuralNetwork nn in neuralNetworks)
             {
-                nn.Train(DataSet);
-                nn.Train(DataSet);
+                nn.Train(dataSet.Images);
             }
         }
 
         private void testNeuralNetworks()
         {
-            textBoxTests.Text = "";
-            //foreach (NeuralNetworkUCI nn in neuralNetworks)
-            //{
-            //    int successfulCount = 0;
-            //    int allCount = 0;
-            //    foreach (var dataset in DataSetsByFonts)
-            //        foreach (CharacterImageUCI image in dataset)
-            //        {
-            //            char recognizedLabel = nn.Recognize(image);
-            //            char correctLabel = image.Label;
-            //            allCount++;
-            //            if (recognizedLabel == correctLabel)
-            //                successfulCount++;
-            //        }
-            //    double accuracy = (double)successfulCount / (double)allCount;
-            //    NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
-            //    nfi.PercentDecimalDigits = 4;
-            //    textBoxTests.AppendText("Neural Network with hidden neurons = " + nn.GetHiddenLayerSize() + ", eta = " + nn.GetLearningRateEta() + ". Accuracy: " + accuracy.ToString("P", nfi) + "\r\n");
-            //}
-
-            foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
+            string testsText = "";
+            if (neuralNetworks.Count > 0)
             {
-                int successfulCount = 0;
-                int allCount = 0;
-                foreach (var dataset in DataSetsByFonts)
-                    foreach (CharacterImageUCI image in dataset)
+                for (int i = 0; i < neuralNetworks.Count; i++)
+                {
+                    NeuralNetwork nn = neuralNetworks[i];
+
+                    int successfulCount = 0;
+                    int allCount = dataSet.Images.Count;
+                    foreach(CharacterImage image in dataSet.Images)
                     {
                         char recognizedLabel = nn.Recognize(image);
-                        char correctLabel = image.Label;
-                        allCount++;
-                        if (recognizedLabel == correctLabel)
+                        if (recognizedLabel == image.Label)
                             successfulCount++;
                     }
-                double accuracy = (double)successfulCount / (double)allCount;
-                NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
-                nfi.PercentDecimalDigits = 4;
-                textBoxTests.AppendText("Neural Network with hidden neurons = " + nn.GetHiddenLayerSize() + ", eta = " + nn.GetLearningRateEta() + ". Accuracy: " + accuracy.ToString("P", nfi) + "\r\n");
+                    double accuracy = (double)successfulCount / (double)allCount;
+                    NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
+                    nfi.PercentDecimalDigits = 4;
+                    testsText += "NN" + (i+1) + ", eta=" + nn.GetLearningRateEta() + ", hiddenLayerSize=" + nn.GetHiddenLayerSize() 
+                        + ", Accuracy=" + accuracy.ToString("P",nfi) + "\r\n";
+                }
             }
+            else
+                testsText = "No neural networks created.";
+            textBoxTests.Text = testsText;
         }
 
         private Bitmap resizeBitmap(Image original, int width, int height)
@@ -140,39 +94,48 @@ namespace NumberRecognizerDesktop
             return resizedBmp;
         }
 
-
-        private void SelectedCharacterChanged(object sender, EventArgs e)
+        private void comboBoxFonts_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int fontNumber = comboBoxFonts.SelectedIndex;
+            numericUpDownCharacters.Maximum = dataSet.ImagesByFontFamily[comboBoxFonts.SelectedItem.ToString()].Count - 1;
+            numericUpDownCharacters.Value = 0;
+            numericUpDownCharacters.Value = numericUpDownCharacters.Maximum;
+        }
+
+        private void numericUpDownCharacters_ValueChanged(object sender, EventArgs e)
+        {
+            string fontFamily = comboBoxFonts.SelectedItem.ToString();
             int characterNumber = decimal.ToInt32(numericUpDownCharacters.Value);
 
-            if (DataSetsByFonts != null && DataSetsByFonts.Count > fontNumber && DataSetsByFonts[fontNumber].Count > characterNumber)
+            if (dataSet != null && dataSet.ImagesByFontFamily.ContainsKey(fontFamily) && dataSet.ImagesByFontFamily[fontFamily].Count > characterNumber)
             {
-                numericUpDownCharacters.Maximum = DataSetsByFonts[fontNumber].Count - 1;
-                displayCharacter(DataSetsByFonts[fontNumber][characterNumber]);
-                textBoxSelectedCharacterInfo.Text = "FontFamily = " + DataSetsByFonts[fontNumber][characterNumber].GetFontFamily() + "\r\n";
-                textBoxSelectedCharacterInfo.AppendText("FontVariant = " + DataSetsByFonts[fontNumber][characterNumber].GetFontVariant() + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("NumberOfCharacters = " + DataSetsByFonts[fontNumber].Count + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Label = " + DataSetsByFonts[fontNumber][characterNumber].Label + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Italic = " + DataSetsByFonts[fontNumber][characterNumber].italic + "\r\n");
-                textBoxSelectedCharacterInfo.AppendText("Strength = " + DataSetsByFonts[fontNumber][characterNumber].strength + "\r\n");
-
-                textBoxRecognized.Text = "Results for all neural networks:\r\n";
-                //foreach(NeuralNetworkUCI nn in neuralNetworks)
-                  //  textBoxRecognized.AppendText("Recognized: " + nn.Recognize(DataSetsByFonts[fontNumber][characterNumber]) + "\r\n");
-                foreach (NeuralNetworkDigits nn in neuralNetworksDigits)
-                    textBoxRecognized.AppendText("Recognized: " + nn.Recognize(DataSetsByFonts[fontNumber][characterNumber]) + "\r\n");
-
+                imageActiveInData = dataSet.ImagesByFontFamily[fontFamily][characterNumber];
+                displayCharacterInData(imageActiveInData);
+                string info = "";
+                info += "FontFamily: " + imageActiveInData.FontFamily + "\r\n";
+                info += "FontVariant: " + imageActiveInData.FontVariant + "\r\n";
+                info += "Label: " + imageActiveInData.Label + "\r\n";
+                info += "Italic: " + imageActiveInData.Italic + "\r\n";
+                info += "Strength: " + imageActiveInData.Strength + "\r\n";
+                textBoxSelectedCharacterInfo.Text = info;
+                if (checkBoxAutoRecognize.Checked)
+                {
+                    Recognize(imageActiveInData);
+                }
+                else
+                {
+                    buttonRecognizeFromData.Enabled = true;
+                }
             }
             else
             {
                 textBoxSelectedCharacterInfo.Text = "Cannot read character.\r\n";
-                textBoxRecognized.Text = "Cannot read characted.\r\n";
-                displayCharacter(null);
+                displayCharacterInData(null);
+                buttonRecognizeFromData.Enabled = false;
             }
         }
 
-        private void displayCharacter(CharacterImage image)
+
+        private void displayCharacterInData(CharacterImage image)
         {
             if (image != null)
             {
@@ -185,18 +148,13 @@ namespace NumberRecognizerDesktop
                         bitmap.SetPixel(x, y, Color.FromArgb(255, grayscaleValue, grayscaleValue, grayscaleValue));
                     }
                 //Display image on picture boxes.
-                pictureBox1.Image = bitmap;
-                pictureBox2.Image = resizeBitmap(bitmap, image.Width * 2, image.Height * 2);
-                pictureBox3.Image = resizeBitmap(bitmap, image.Width * 4, image.Height * 4);
-                pictureBox4.Image = resizeBitmap(bitmap, image.Width * 8, image.Height * 8);
-
+                pictureBoxData.Image = resizeBitmap(bitmap, image.Width * 8, image.Height * 8);
             }
             else
-                pictureBox1.Image = pictureBox2.Image = pictureBox3.Image = pictureBox4.Image = null;
-            
+                pictureBoxData.Image = null;
         }
 
-        private void displayTestCharacter(CharacterImage image)
+        private void displayCharacterInRecognize(CharacterImage image)
         {
             if (image != null)
             {
@@ -208,13 +166,60 @@ namespace NumberRecognizerDesktop
                         int grayscaleValue = image.Pixels[y * image.Width + x];
                         bitmap.SetPixel(x, y, Color.FromArgb(255, grayscaleValue, grayscaleValue, grayscaleValue));
                     }
-                pictureBoxTest1.Image = bitmap;
-                pictureBoxTest2.Image = resizeBitmap(bitmap, image.Width * 2, image.Height * 2);
-                pictureBoxTest3.Image = resizeBitmap(bitmap, image.Width * 4, image.Height * 4);
-                pictureBoxTest4.Image = resizeBitmap(bitmap, image.Width * 8, image.Height * 8);
+                pictureBoxRecognize.Image = resizeBitmap(bitmap, image.Width * 8, image.Height * 8);
             }
             else
-                pictureBoxTest1.Image = pictureBoxTest2.Image = pictureBoxTest3.Image = pictureBoxTest4.Image = null;
+                pictureBoxRecognize.Image = null;
+        }
+
+        private void buttonRecognize_Click(object sender, EventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+                CharacterImage img = DataLoader.LoadFromBMP(fileName);
+                Recognize(img);
+            }
+        }
+
+        private void buttonRecognizeFromData_Click(object sender, EventArgs e)
+        {
+            if (imageActiveInData != null)
+                Recognize(imageActiveInData);
+        }
+
+        private void Recognize(CharacterImage imageToRecognize)
+        {
+            string recognizedText = "Cannot use that image.";
+            if (imageToRecognize != null)
+            {
+                displayCharacterInRecognize(imageToRecognize);
+                recognizedText = "Expected result: " + imageToRecognize.Label + "\r\n";
+                if (neuralNetworks != null && neuralNetworks.Count > 0)
+                {
+                    for (int i = 0; i < neuralNetworks.Count; i++)
+                    {
+                        char recognized = neuralNetworks[i].Recognize(imageToRecognize);
+                        recognizedText += "NN" + (i + 1) + ": " + recognized + "\r\n";
+                    }
+                }
+                else
+                    recognizedText += "No neural networks created.";
+            }
+            textBoxRecognized.Text = recognizedText;
+        }
+
+        private void checkBoxAutoRecognize_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAutoRecognize.Checked)
+            {
+                buttonRecognizeFromData.Enabled = false;
+            }
+            else
+            {
+                buttonRecognizeFromData.Enabled = true;
+            }
         }
     }
 }

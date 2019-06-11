@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace NumberRecognizerDesktop
 {
-    class NeuralNetworkMNIST
+    class NeuralNetworkLetters : NeuralNetwork
     {
-        int inputLayerSize = 784;
-        int hiddenLayerSize = 15;
-        int outputLayerSize = 10;
+        int inputLayerSize = 400;
+        //Output neurons 0-25 represent A-Z.
+        int outputLayerSize = 26/*capital letters*/;
 
         double[] inputs;
         Neuron[] hiddenLayer;
         Neuron[] outputLayer;
 
-        double eta;
-
-        public NeuralNetworkMNIST(double learningRateEta)
+        public NeuralNetworkLetters(double learningRateEta, int hiddenLayerSize)
         {
             eta = learningRateEta;
+            this.hiddenLayerSize = hiddenLayerSize;
             inputs = new double[inputLayerSize];
             hiddenLayer = new Neuron[hiddenLayerSize];
             outputLayer = new Neuron[outputLayerSize];
@@ -30,12 +29,8 @@ namespace NumberRecognizerDesktop
                 outputLayer[i] = new Neuron(hiddenLayerSize);
         }
 
-        public double GetLearningRateEta()
-        {
-            return eta;
-        }
 
-        public int Recognize(CharacterImageMNIST image)
+        override public char Recognize(CharacterImage image)
         {
             inputs = image.NormalizedPixels;
 
@@ -49,17 +44,22 @@ namespace NumberRecognizerDesktop
 
             //Find most probable output.
             double max = outputLayerOutputs.Max();
-            return Array.IndexOf(outputLayerOutputs, max);
+            int mostProbableIndex = Array.IndexOf(outputLayerOutputs, max);
+            //Return guessed digit or letter.
+            //if (mostProbableIndex < 10)
+                //return (char)('0' + mostProbableIndex);
+            //else
+                return (char)('A' + mostProbableIndex);
         }
 
-
-        public void Train(List<CharacterImageMNIST> dataset)
+        override public void Train(List<CharacterImage> dataset)
         {
-            foreach (CharacterImageMNIST image in dataset)
+            foreach (CharacterImage image in dataset)
             {
                 //Desired output is neuron corresponding to the digit label outputs 1.0, the rest outputs 0.0.
                 double[] desiredOutputs = new double[outputLayerSize];
-                desiredOutputs[(int)char.GetNumericValue(image.Label)] = 1.0;
+                if (image.Label >= 'A' && image.Label <= 'Z')
+                    desiredOutputs[image.Label - 'A'] = 1.0;
 
                 //Run image through the neural network.
                 Recognize(image);

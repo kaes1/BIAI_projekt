@@ -9,120 +9,7 @@ namespace NumberRecognizerDesktop
 {
     public static class DataLoader
     {
-
-        private static readonly String[] enabledCSV = {"ROMAN.csv", "ARIAL.csv", "WIDE.csv", "STENCIL.csv"};
-
-        private static List<List<CharacterImageUCI>> datasetsUciByFonts; 
-
-        /*public static List<CharacterImageMNIST> LoadFromFileCSV_MNIST(string filePath)
-        {
-            var dataset = new List<CharacterImageMNIST>();
-            //Read csv.
-            using (var reader = new StreamReader(filePath))
-            {
-                //Skip first line of csv.
-                var firstline = reader.ReadLine();
-                //Read the rest of csv, create image for each line and add to images list.
-                while (!reader.EndOfStream)
-                {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
-                    CharacterImageMNIST newImage = new CharacterImageMNIST(values);
-                    dataset.Add(newImage);
-                }
-            }
-
-            return dataset;
-        }*/
-
-
-        /*public static List<List<CharacterImageUCI>> LoadFromFolderCSV_UCI(string folderPath)
-        {
-            var uciSets = new List<List<CharacterImageUCI>>();
-
-            //Get all csv files in specified directory.
-            foreach (string file in Directory.EnumerateFiles(folderPath, "*.csv"))
-            {
-                //Remove weird fonts
-                if (file.EndsWith("VLADIMIR.csv") || 
-                    file.EndsWith("VIVALDI.csv") || file.EndsWith("STYLUS.csv") || file.EndsWith("SNAP.csv") || file.EndsWith("SKETCHFLOW.csv") ||
-                    file.EndsWith("SHOWCARD.csv") || file.EndsWith("SCRIPT.csv") || file.EndsWith("SCRIPTB.csv") || file.EndsWith("ROMANTIC.csv") ||
-                    file.EndsWith("RAVIE.csv") || file.EndsWith("RAGE.csv") || file.EndsWith("PALACE.csv") || file.EndsWith("MONEY.csv") ||
-                    file.EndsWith("MISTRAL.csv") || file.EndsWith("MATURA.csv") || file.EndsWith("MAGNETO.csv") || file.EndsWith("KUNSTLER.csv") ||
-                    file.EndsWith("JOKERMAN.csv") || file.EndsWith("HARRINGTON.csv") || file.EndsWith("HARLOW.csv") || file.EndsWith("GOTHICE.csv") ||
-                    file.EndsWith("GIGI.csv") || file.EndsWith("FRENCH.csv") || file.EndsWith("ENGLISH.csv") || file.EndsWith("CURLZ.csv") ||
-                    file.EndsWith("COMMERCIALSCRIPT.csv") || file.EndsWith("BRADLEY.csv") || file.EndsWith("BLACKADDER.csv"))
-                    continue;
-
-                var dataset = new List<CharacterImageUCI>();
-
-                using (var reader = new StreamReader(file))
-                {
-                    //Skip first line of csv.
-                    var firstline = reader.ReadLine();
-                    //Read the rest of csv, create image for each line and add to images list.
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine();
-                        var values = line.Split(',');
-                        
-                        //Add only digits and capital letters, which are not italic.
-                        char label = Convert.ToChar(int.Parse(values[2]));
-                        bool italic = values[4] == "1";
-                        string fontVariant = values[1];
-                        if ((label >= '0' && label <= '9' || label >= 'A' && label <= 'Z') && !italic && !fontVariant.ToUpperInvariant().Equals("SCANNED"))
-                        {
-                            CharacterImageUCI newImage = new CharacterImageUCI(values);
-                            dataset.Add(newImage);
-                        }      
-                    }
-                }
-
-                uciSets.Add(dataset);
-            }
-
-            return uciSets;
-        }*/
-
-        public static List<CharacterImageUCI> LoadUciCsv(string folderPath)
-        {
-            var setsByFonts = LoadUciCsvByFonts(folderPath);
-            var characterImages = new List<CharacterImageUCI>();
-            foreach (List<CharacterImageUCI> set in setsByFonts)
-                foreach (CharacterImageUCI characterImage in set)
-                    characterImages.Add(characterImage);
-
-            return characterImages;
-        }
-
-
-        public static List<List<CharacterImageUCI>> LoadUciCsvByFonts(string folderPath)
-        {
-            var uciSets = new List<List<CharacterImageUCI>>();
-            foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
-            {
-                if (enabledCSV.Any(enabledName => fileName.EndsWith(enabledName))) 
-                {
-                    var dataset = new List<CharacterImageUCI>();
-                    using (var reader = new StreamReader(fileName))
-                    {
-                        //Skip first line of csv.
-                        var firstline = reader.ReadLine();
-                        //Read the rest of csv, create image for each line and add to images list.
-                        while (!reader.EndOfStream)
-                        {
-                            var line = reader.ReadLine();
-                            var values = line.Split(',');
-                            CharacterImageUCI newImage = new CharacterImageUCI(values);
-                            if ((newImage.Label >= '0' && newImage.Label <= '9' /*|| newImage.Label >= 'A' && newImage.Label <= 'Z'*/) /*&& !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED")*/)
-                                dataset.Add(newImage);
-                        }
-                    }
-                    uciSets.Add(dataset);
-                }
-            }
-            return uciSets;
-        }
+        //private static readonly String[] enabledCSV = { "ROMAN.csv", "ARIAL.csv", "WIDE.csv", "STENCIL.csv" };
 
         public static CharacterImage LoadFromBMP(string filePath)
         {
@@ -143,5 +30,136 @@ namespace NumberRecognizerDesktop
             }
             return characterImage;
         }
+
+        public static DataSet LoadDataSet(string folderPath)
+        {
+            DataSet dataSet = new DataSet();
+            foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
+                //if (enabledCSV.Any(enabledName => fileName.EndsWith(enabledName)))
+                if (true)
+                    using (var reader = new StreamReader(fileName))
+                    {
+                        //Skip first line of csv.
+                        reader.ReadLine();
+                        //Read the rest of csv, create image for each line and add to images list.
+                        while (!reader.EndOfStream)
+                        {
+                            //Read one line with values for one image
+                            var values = reader.ReadLine().Split(',');
+                            //For this dataset width and height are both 20.
+                            int width = 20;
+                            int height = 20;
+                            char label = Convert.ToChar(int.Parse(values[2]));
+                            //Fill pixel array.
+                            int[] pixels = new int[width * height];
+                            for (int i = 0; i < width * height; i++)
+                                pixels[i] = int.Parse(values[12 + i]);
+                            //Read information specific to this dataset.
+                            string fontFamily = values[0];
+                            string fontVariant = values[1];
+                            float strength = float.Parse(values[3], System.Globalization.CultureInfo.InvariantCulture);
+                            bool italic = values[4] == "1";
+                            float orientation = float.Parse(values[5], System.Globalization.CultureInfo.InvariantCulture);
+                            int m_top = int.Parse(values[6]);
+                            int m_left = int.Parse(values[7]);
+                            int originalHeight = int.Parse(values[8]);
+                            int originalWidth = int.Parse(values[9]);
+
+                            CharacterImage newImage = new CharacterImage(20, 20, label, pixels, fontFamily, fontVariant, italic, strength);
+
+                            if ((newImage.Label >= '0' && newImage.Label <= '9' || newImage.Label >= 'A' && newImage.Label <= 'Z') /*&& !newImage.GetFontVariant().ToUpperInvariant().Equals("SCANNED")*/)
+                                dataSet.Add(newImage);
+                        }
+                    }
+            return dataSet;
+        }
+
+        public static DataSet LoadDataSetDigits(string folderPath)
+        {
+            DataSet dataSet = new DataSet();
+            foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
+                //if (enabledCSV.Any(enabledName => fileName.EndsWith(enabledName)))
+                if (true)
+                    using (var reader = new StreamReader(fileName))
+                    {
+                        //Skip first line of csv.
+                        reader.ReadLine();
+                        //Read the rest of csv, create image for each line and add to images list.
+                        while (!reader.EndOfStream)
+                        {
+                            //Read one line with values for one image
+                            var values = reader.ReadLine().Split(',');
+                            //For this dataset width and height are both 20.
+                            int width = 20;
+                            int height = 20;
+                            char label = Convert.ToChar(int.Parse(values[2]));
+                            //Fill pixel array.
+                            int[] pixels = new int[width * height];
+                            for (int i = 0; i < width * height; i++)
+                                pixels[i] = int.Parse(values[12 + i]);
+                            //Read information specific to this dataset.
+                            string fontFamily = values[0];
+                            string fontVariant = values[1];
+                            float strength = float.Parse(values[3], System.Globalization.CultureInfo.InvariantCulture);
+                            bool italic = values[4] == "1";
+                            float orientation = float.Parse(values[5], System.Globalization.CultureInfo.InvariantCulture);
+                            int m_top = int.Parse(values[6]);
+                            int m_left = int.Parse(values[7]);
+                            int originalHeight = int.Parse(values[8]);
+                            int originalWidth = int.Parse(values[9]);
+
+                            CharacterImage newImage = new CharacterImage(20, 20, label, pixels, fontFamily, fontVariant, italic, strength);
+
+                            if (newImage.Label >= '0' && newImage.Label <= '9')
+
+                                dataSet.Add(newImage);
+                        }
+                    }
+            return dataSet;
+        }
+
+        public static DataSet LoadDataSetLetters(string folderPath)
+        {
+            DataSet dataSet = new DataSet();
+            foreach (string fileName in Directory.EnumerateFiles(folderPath, "*.csv"))
+                //if (enabledCSV.Any(enabledName => fileName.EndsWith(enabledName)))
+                if (true)
+                    using (var reader = new StreamReader(fileName))
+                    {
+                        //Skip first line of csv.
+                        reader.ReadLine();
+                        //Read the rest of csv, create image for each line and add to images list.
+                        while (!reader.EndOfStream)
+                        {
+                            //Read one line with values for one image
+                            var values = reader.ReadLine().Split(',');
+                            //For this dataset width and height are both 20.
+                            int width = 20;
+                            int height = 20;
+                            char label = Convert.ToChar(int.Parse(values[2]));
+                            //Fill pixel array.
+                            int[] pixels = new int[width * height];
+                            for (int i = 0; i < width * height; i++)
+                                pixels[i] = int.Parse(values[12 + i]);
+                            //Read information specific to this dataset.
+                            string fontFamily = values[0];
+                            string fontVariant = values[1];
+                            float strength = float.Parse(values[3], System.Globalization.CultureInfo.InvariantCulture);
+                            bool italic = values[4] == "1";
+                            float orientation = float.Parse(values[5], System.Globalization.CultureInfo.InvariantCulture);
+                            int m_top = int.Parse(values[6]);
+                            int m_left = int.Parse(values[7]);
+                            int originalHeight = int.Parse(values[8]);
+                            int originalWidth = int.Parse(values[9]);
+
+                            CharacterImage newImage = new CharacterImage(20, 20, label, pixels, fontFamily, fontVariant, italic, strength);
+
+                            if (newImage.Label >= 'A' && newImage.Label <= 'Z' && newImage.Italic == false)
+                                dataSet.Add(newImage);
+                        }
+                    }
+            return dataSet;
+        }
+
     }
 }

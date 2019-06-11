@@ -8,6 +8,7 @@ namespace NumberRecognizerDesktop
 {
     public class Neuron
     {
+        static Random randomNumberGenerator = new Random();
         //Weight concerning activation threshold.
         double w_0;
         //Activation threshold.
@@ -23,19 +24,23 @@ namespace NumberRecognizerDesktop
         {
             //Create weights array.
             weights = new double[previousLayerSize];
-            //Initialize bias randomly using normal distribution.
-            Random rand = new Random();
-            double u1 = 1.0 - rand.NextDouble(); //Uniform(0,1] random doubles
-            double u2 = 1.0 - rand.NextDouble(); // - || -
-            w_0 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
+            w_0 = (randomNumberGenerator.NextDouble() * 2.0) - 1.0;
             x_0 = 1.0;
-            //Initialize weights.
             for (int i = 0; i < weights.Length; i++)
-            {
-                u1 = 1.0 - rand.NextDouble();
-                u2 = 1.0 - rand.NextDouble();
-                weights[i] = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
-            }
+                weights[i] = (randomNumberGenerator.NextDouble() * 2.0) - 1.0;
+
+            //Initialize bias randomly using normal distribution.
+            //double u1 = 1.0 - randomNumberGenerator.NextDouble(); //Uniform(0,1] random doubles
+            //double u2 = 1.0 - randomNumberGenerator.NextDouble(); // - || -
+            //w_0 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
+            //x_0 = 1.0;
+            ////Initialize weights.
+            //for (int i = 0; i < weights.Length; i++)
+            //{
+            //    u1 = 1.0 - randomNumberGenerator.NextDouble();
+            //    u2 = 1.0 - randomNumberGenerator.NextDouble();
+            //    weights[i] = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
+            //}
         }
 
         private static double SigmoidFunction(double x)
