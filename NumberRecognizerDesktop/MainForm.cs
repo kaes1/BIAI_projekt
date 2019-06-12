@@ -22,7 +22,7 @@ namespace NumberRecognizerDesktop
             InitializeComponent();
 
             //Load data.
-            dataSet = DataLoader.LoadDataSetLetters(@"G:\Studia\BIAI\UCI");
+            dataSet = DataLoader.LoadDataSetLetters(@"C:\Users\Aleksandra\Documents\GitHub\fonts");
             //Display data statistics.
             string stats = "Total count: " + dataSet.Images.Count + ", Distinct characters: " + dataSet.ImagesByCharacter.Count + "\r\n\r\n";
             foreach(KeyValuePair<char, List<CharacterImage>> pair in dataSet.ImagesByCharacter)
@@ -35,35 +35,40 @@ namespace NumberRecognizerDesktop
             neuralNetworks = new List<NeuralNetwork>();
             //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 20));
             //neuralNetworks.Add(new NeuralNetworkUCI(0.1, 40));
-            //neuralNetworks.Add(new NeuralNetworkLetters(0.1, 20));
-            //neuralNetworks.Add(new NeuralNetworkLetters(0.1, 40));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 20));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 40));
             neuralNetworks.Add(new NeuralNetworkLetters(0.1, 60));
-            //neuralNetworks.Add(new NeuralNetworkLetters(0.1, 60));
-            //neuralNetworks.Add(new NeuralNetworkLetters(0.1, 100));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 60));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.1, 100));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.05, 20));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.05, 40));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.05, 60));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.05, 60));
+            neuralNetworks.Add(new NeuralNetworkLetters(0.05, 100));
 
             //Train networks.
-            //trainNeuralNetworks();
+            trainNeuralNetworks();
 
-            //SAVE BEST NETWORK?
-            double[] weights = neuralNetworks[0].GetWeightsForSaving();
-            //neuralNetworks[1].LoadWeightsFromSave(weights);
-            Stream SaveFileStream = File.Create(@"G:\Studia\BIAI\saved_weights.bin");
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-            serializer.Serialize(SaveFileStream, weights);
-            SaveFileStream.Close();
+            ////SAVE BEST NETWORK?
+            //double[] weights = neuralNetworks[0].GetWeightsForSaving();
+            ////neuralNetworks[1].LoadWeightsFromSave(weights);
+            //Stream SaveFileStream = File.Create(@"G:\Studia\BIAI\saved_weights.bin");
+            //System.Runtime.Serialization.Formatters.Binary.BinaryFormatter serializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            //serializer.Serialize(SaveFileStream, weights);
+            //SaveFileStream.Close();
 
 
-            NeuralNetwork testNN = new NeuralNetworkLetters(0.1, 60);
-            if (File.Exists(@"G:\Studia\BIAI\saved_weights.bin"))
-            {
-                Stream openFileStream = File.OpenRead(@"G:\Studia\BIAI\saved_weights.bin");
-                System.Runtime.Serialization.Formatters.Binary.BinaryFormatter deserializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                double[] weightsFromFile = (double[])deserializer.Deserialize(openFileStream);
-                testNN.LoadWeightsFromSave(weightsFromFile);
-                openFileStream.Close();
-            }
+            //NeuralNetwork testNN = new NeuralNetworkLetters(0.1, 60);
+            //if (File.Exists(@"G:\Studia\BIAI\saved_weights.bin"))
+            //{
+            //    Stream openFileStream = File.OpenRead(@"G:\Studia\BIAI\saved_weights.bin");
+            //    System.Runtime.Serialization.Formatters.Binary.BinaryFormatter deserializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            //    double[] weightsFromFile = (double[])deserializer.Deserialize(openFileStream);
+            //    testNN.LoadWeightsFromSave(weightsFromFile);
+            //    openFileStream.Close();
+            //}
 
-            neuralNetworks.Add(testNN);
+            //neuralNetworks.Add(testNN);
 
             
 
