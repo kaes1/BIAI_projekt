@@ -100,5 +100,15 @@ namespace NumberRecognizerDesktop
 
             }
         }
+
+        public override double[] GetWeightsForSaving()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void LoadWeightsFromSave(double[] allWeights)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

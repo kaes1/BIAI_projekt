@@ -98,5 +98,74 @@ namespace NumberRecognizerDesktop
 
             }
         }
+
+        public override double[] GetWeightsForSaving()
+        {
+            int size = hiddenLayer.Length * (hiddenLayer[0].GetWeights().Length + 1) + outputLayer.Length * (outputLayer[0].GetWeights().Length + 1);
+            double[] allWeights = new double[size];
+
+            int i = 0;
+            foreach(Neuron n in hiddenLayer)
+            {
+                double[] weights = n.GetWeights();
+                double w_0 = n.GetW_0();
+                foreach(double w in weights)
+                {
+                    allWeights[i] = w;
+                    i++;
+                }
+                allWeights[i] = w_0;
+                i++;
+            }
+
+            foreach (Neuron n in outputLayer)
+            {
+                double[] weights = n.GetWeights();
+                double w_0 = n.GetW_0();
+                foreach (double w in weights)
+                {
+                    allWeights[i] = w;
+                    i++;
+                }
+                allWeights[i] = w_0;
+                i++;
+            }
+            return allWeights;
+        }
+
+        public override void LoadWeightsFromSave(double[] allWeights)
+        {
+            int i = 0;
+            foreach (Neuron n in hiddenLayer)
+            {
+                int size = n.GetWeights().Length;
+                double[] weights = new double[size];
+                double w_0;
+                for(int j = 0; j < size; j++)
+                {
+                    weights[j] = allWeights[i];
+                    i++;
+                }
+                w_0 = allWeights[i];
+                i++;
+                n.SetWeights(weights, w_0);
+            }
+
+            foreach (Neuron n in outputLayer)
+            {
+                int size = n.GetWeights().Length;
+                double[] weights = new double[size];
+                double w_0;
+                for (int j = 0; j < size; j++)
+                {
+                    weights[j] = allWeights[i];
+                    i++;
+                }
+                w_0 = allWeights[i];
+                i++;
+                n.SetWeights(weights, w_0);
+            }
+
+        }
     }
 }

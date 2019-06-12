@@ -24,5 +24,8 @@ namespace NumberRecognizerDesktop
         {
             return hiddenLayerSize;
         }
+
+        public abstract double[] GetWeightsForSaving();
+        public abstract void LoadWeightsFromSave(double[] allWeights);
     }
 }

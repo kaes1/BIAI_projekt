@@ -28,19 +28,6 @@ namespace NumberRecognizerDesktop
             x_0 = 1.0;
             for (int i = 0; i < weights.Length; i++)
                 weights[i] = (randomNumberGenerator.NextDouble() * 2.0) - 1.0;
-
-            //Initialize bias randomly using normal distribution.
-            //double u1 = 1.0 - randomNumberGenerator.NextDouble(); //Uniform(0,1] random doubles
-            //double u2 = 1.0 - randomNumberGenerator.NextDouble(); // - || -
-            //w_0 = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
-            //x_0 = 1.0;
-            ////Initialize weights.
-            //for (int i = 0; i < weights.Length; i++)
-            //{
-            //    u1 = 1.0 - randomNumberGenerator.NextDouble();
-            //    u2 = 1.0 - randomNumberGenerator.NextDouble();
-            //    weights[i] = Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2); //Random normal(0,1)
-            //}
         }
 
         private static double SigmoidFunction(double x)
@@ -66,6 +53,20 @@ namespace NumberRecognizerDesktop
         public double[] GetWeights()
         {
             return weights;
+        }
+
+        public double GetW_0()
+        {
+            return w_0;
+        }
+
+        public void SetWeights(double[] weights, double w_0)
+        {
+            if (weights.Length != this.weights.Length)
+                return;
+
+            this.weights = weights;
+            this.w_0 = w_0;
         }
 
         public void ModifyWeights(double eta, double generalizedDelta)
