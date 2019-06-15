@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NumberRecognizerDesktop.Properties
+namespace CharacterRecognizer.Properties
 {
 
 

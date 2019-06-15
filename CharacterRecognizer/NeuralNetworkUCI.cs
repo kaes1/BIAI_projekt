@@ -4,31 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NumberRecognizerDesktop
+namespace CharacterRecognizer
 {
-    class NeuralNetworkDigits : NeuralNetwork
+    class NeuralNetworkUCI : NeuralNetwork
     {
-        int inputLayerSize = 400;
-        //Output neurons 0-9 represent '0'-'9'.
-        int outputLayerSize = 10/*digits*/;
+        //Output neurons 0-9 represent '0'-'9', neurons 10-35 represent A-Z.
+        public NeuralNetworkUCI(double learningRateEta, int hiddenLayerSize) : base(400, hiddenLayerSize, 36, learningRateEta) { }
 
-        double[] inputs;
-        Neuron[] hiddenLayer;
-        Neuron[] outputLayer;
-
-        public NeuralNetworkDigits(double learningRateEta, int hiddenLayerSize)
-        {
-            eta = learningRateEta;
-            this.hiddenLayerSize = hiddenLayerSize;
-            inputs = new double[inputLayerSize];
-            hiddenLayer = new Neuron[hiddenLayerSize];
-            outputLayer = new Neuron[outputLayerSize];
-            for (int i = 0; i < hiddenLayer.Length; i++)
-                hiddenLayer[i] = new Neuron(inputLayerSize);
-            for (int i = 0; i < outputLayer.Length; i++)
-                outputLayer[i] = new Neuron(hiddenLayerSize);
-        }
-
+        public NeuralNetworkUCI(NeuralNetworkState savedState) : base(savedState) { }
 
         override public char Recognize(CharacterImage image)
         {
@@ -46,10 +29,10 @@ namespace NumberRecognizerDesktop
             double max = outputLayerOutputs.Max();
             int mostProbableIndex = Array.IndexOf(outputLayerOutputs, max);
             //Return guessed digit or letter.
-            //if (mostProbableIndex < 10)
+            if (mostProbableIndex < 10)
                 return (char)('0' + mostProbableIndex);
-            //else
-            //    return (char)('A' + mostProbableIndex - 10);
+            else
+                return (char)('A' + mostProbableIndex - 10);
         }
 
         override public void Train(List<CharacterImage> dataset)
@@ -57,9 +40,11 @@ namespace NumberRecognizerDesktop
             foreach (CharacterImage image in dataset)
             {
                 //Desired output is neuron corresponding to the digit label outputs 1.0, the rest outputs 0.0.
-                double[] desiredOutputs = new double[outputLayerSize];
+                double[] desiredOutputs = new double[OutputLayerSize];
                 if (image.Label >= '0' && image.Label <= '9')
                     desiredOutputs[image.Label - '0'] = 1.0;
+                else if (image.Label >= 'A' && image.Label <= 'Z')
+                    desiredOutputs[image.Label - 'A' + 10] = 1.0;
 
                 //Run image through the neural network.
                 Recognize(image);
@@ -69,44 +54,26 @@ namespace NumberRecognizerDesktop
                 double[] outputLayerGeneralizedDeltas = new double[outputLayer.Length];
                 for (int i = 0; i < outputLayer.Length; i++)
                 {
-                    double delta = 1.0 * (desiredOutputs[i] - outputLayer[i].GetOutput()) * outputLayer[i].GetOutput() * (1.0 - outputLayer[i].GetOutput());
+                    double delta = 1.0 * (desiredOutputs[i] - outputLayer[i].Output) * outputLayer[i].Output * (1.0 - outputLayer[i].Output);
                     outputLayerGeneralizedDeltas[i] = delta;
                 }
-
                 //Calculate generalized deltas for hidden layer.
                 double[] hiddenLayerGeneralizedDeltas = new double[hiddenLayer.Length];
                 for (int i = 0; i < hiddenLayer.Length; i++)
                 {
                     double sum = 0.0;
                     for (int k = 0; k < outputLayer.Length; k++)
-                        sum += outputLayerGeneralizedDeltas[k] * outputLayer[k].GetWeights()[i];
-                    double delta = 1.0 * hiddenLayer[i].GetOutput() * (1 - hiddenLayer[i].GetOutput()) * sum;
+                        sum += outputLayerGeneralizedDeltas[k] * outputLayer[k].Weights[i];
+                    double delta = 1.0 * hiddenLayer[i].Output * (1 - hiddenLayer[i].Output) * sum;
                     hiddenLayerGeneralizedDeltas[i] = delta;
                 }
 
                 //Modify weights of output layer.
                 for (int i = 0; i < outputLayer.Length; i++)
-                {
-                    outputLayer[i].ModifyWeights(eta, outputLayerGeneralizedDeltas[i]);
-                }
-
+                    outputLayer[i].ModifyWeights(Eta, outputLayerGeneralizedDeltas[i]);
                 //Modify weights of hidden layer.
-                for (int i = 0; i < hiddenLayer.Length; i++)
-                {
-                    hiddenLayer[i].ModifyWeights(eta, hiddenLayerGeneralizedDeltas[i]);
-                }
-
+                for (int i = 0; i < hiddenLayer.Length; i++) ;
             }
-        }
-
-        public override double[] GetWeightsForSaving()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void LoadWeightsFromSave(double[] allWeights)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NumberRecognizerDesktop
+namespace CharacterRecognizer
 {
     public static class DataLoader
     {
@@ -25,7 +25,7 @@ namespace NumberRecognizerDesktop
                         int grayscaleValue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
                         pixels[y * bmp.Width + x] = grayscaleValue;
                     }
-                characterImage = new CharacterImage(bmp.Width, bmp.Height, 'Z', pixels);
+                characterImage = new CharacterImage(bmp.Width, bmp.Height, Path.GetFileName(filePath)[0], pixels);
                 bmp.Dispose();
             }
             return characterImage;
