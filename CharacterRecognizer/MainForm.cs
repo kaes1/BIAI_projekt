@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -12,6 +11,8 @@ namespace CharacterRecognizer
     public partial class MainForm : Form
     {
         private DataSet DataSet;
+        private DataSet TrainingSet;
+        private DataSet TestSet;
         private NeuralNetwork PresetNeuralNetwork;
         private NeuralNetwork CustomNeuralNetwork;
 
@@ -20,26 +21,58 @@ namespace CharacterRecognizer
         public MainForm()
         {
             InitializeComponent();
+        }
 
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
             //Load data.
-            DataSet = DataLoader.LoadDataSet(@"G:\Studia\BIAI\UCI");
+            DataSet = DataLoader.LoadAllData();
+            TrainingSet = DataSet.GetTrainingSet();
+            TestSet = DataSet.GetTestSet();
             //Display data statistics.
-            string stats = "Total count: " + DataSet.Images.Count + ", Characters: " + DataSet.ImagesByCharacter.Count + ", Fonts: " + DataSet.ImagesByFontFamily.Count + "\r\n\r\n";
-            foreach (KeyValuePair<char, List<CharacterImage>> pair in DataSet.ImagesByCharacter)
-                stats += pair.Key + ": " + pair.Value.Count + "\t";
-            textBoxDataSetStatistics.Text = stats;
+            updateDataStatisctics();
             //Setup font selection combo box.
             comboBoxFonts.DataSource = new List<string>(DataSet.ImagesByFontFamily.Keys);
             //Load preset network
-            loadPresetNeuralNetwork(); 
+            loadPresetNeuralNetwork();
+        }
+
+        private void updateDataStatisctics()
+        {
+            string stats = "";
+            if (radioButtonAllData.Checked)
+            {
+                stats = "All Data.\r\n";
+                stats += "Total count: " + DataSet.Images.Count + ", Characters: " + DataSet.ImagesByCharacter.Count + ", Fonts: " + DataSet.ImagesByFontFamily.Count + "\r\n";
+                foreach (KeyValuePair<char, List<CharacterImage>> pair in DataSet.ImagesByCharacter)
+                    stats += pair.Key + ": " + pair.Value.Count + "\t";
+                stats += "\r\n";
+            }
+            else if (radioButtonTrainingSet.Checked)
+            {
+                stats = "Training Set.\r\n";
+                stats += "Total count: " + TrainingSet.Images.Count + ", Characters: " + TrainingSet.ImagesByCharacter.Count + ", Fonts: " + TrainingSet.ImagesByFontFamily.Count + "\r\n";
+                foreach (KeyValuePair<char, List<CharacterImage>> pair in TrainingSet.ImagesByCharacter)
+                    stats += pair.Key + ": " + pair.Value.Count + "\t";
+                stats += "\r\n";
+            }
+            else if (radioButtonTestSet.Checked)
+            {
+                stats = "Test Set.\r\n";
+                stats += "Total count: " + TestSet.Images.Count + ", Characters: " + TestSet.ImagesByCharacter.Count + ", Fonts: " + TestSet.ImagesByFontFamily.Count + "\r\n";
+                foreach (KeyValuePair<char, List<CharacterImage>> pair in TestSet.ImagesByCharacter)
+                    stats += pair.Key + ": " + pair.Value.Count + "\t";
+                stats += "\r\n";
+            }
+            textBoxDataSetStatistics.Text = stats;
         }
 
         private void loadPresetNeuralNetwork()
         {
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(NeuralNetworkState));
-            if (File.Exists(@"G:\Studia\BIAI\presetNN.xml"))
+            if (File.Exists(@"presetNN.xml"))
             {
-                var file = new StreamReader(@"G:\Studia\BIAI\presetNN.xml");
+                var file = new StreamReader(@"presetNN.xml");
                 NeuralNetworkState presetState = (NeuralNetworkState)reader.Deserialize(file);
                 file.Close();
                 PresetNeuralNetwork = new NeuralNetworkUCI(presetState);
@@ -53,47 +86,38 @@ namespace CharacterRecognizer
                 textBoxPresetNeuralNetwork.Text = "Could not load preset neural network. \r\nMake sure presetNN.xml exists in application folder.";
         }
 
-        //private void saveNeuralNetwork(NeuralNetwork nn)
-        //{
-        //    //save 
-        //    System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(NeuralNetworkState));
-        //    var wfile = new StreamWriter(@"G:\Studia\BIAI\savedNN.xml");
-        //    writer.Serialize(wfile, nn.GetNeuralNetworkState());
-        //    wfile.Close();
-        //}
+        private void saveNeuralNetwork(NeuralNetwork nn, int i)
+        {
+            //save 
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(NeuralNetworkState));
+            var wfile = new StreamWriter(@"G:\Studia\BIAI\savedNN"+i+".xml");
+            writer.Serialize(wfile, nn.GetNeuralNetworkState());
+            wfile.Close();
+        }
 
         private void trainNeuralNetwork(NeuralNetwork nn)
         {
-            nn.Train(DataSet.Images);
+            nn.Train(TrainingSet.Images);
         }
 
         private string testNeuralNetwork(NeuralNetwork nn)
         {
             if (nn == null)
                 return null;
-
-            int allImages = DataSet.Images.Count;
+            int allImages = TestSet.Images.Count;
             int successfullyRecognized = 0;
-            foreach (CharacterImage image in DataSet.Images)
+            foreach (CharacterImage image in TestSet.Images)
+            {
                 if (nn.Recognize(image) == image.Label)
                     successfullyRecognized++;
+            }
+                
             double accuracy = (double)successfullyRecognized / (double)allImages;
             NumberFormatInfo nfi = new CultureInfo("en-US", false).NumberFormat;
             nfi.PercentDecimalDigits = 4;
-            return "Accuracy: " + accuracy.ToString("P", nfi) + "\r\n" +
+            string testStats =  "Accuracy: " + accuracy.ToString("P", nfi) + "\r\n" +
                 "Decision Error: " + (1 - accuracy).ToString("P", nfi) + "\r\n" +
-                "Normalized Decision Error: " + ((1 - accuracy) / 36).ToString("P", nfi);
-        }
-
-        private Bitmap resizeBitmap(Image original, int width, int height)
-        {
-            Bitmap resizedBmp = new Bitmap(width, height);
-            using (Graphics gr = Graphics.FromImage(resizedBmp))
-            {
-                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
-                gr.DrawImage(original, new Rectangle(0, 0, width, height));
-            }
-            return resizedBmp;
+                "Normalized Decision Error: " + ((1 - accuracy) / 36).ToString("P", nfi) + "\r\n";      return testStats + "\r\n";
         }
 
         private void buttonLoadImageFromFile_Click(object sender, EventArgs e)
@@ -111,9 +135,19 @@ namespace CharacterRecognizer
 
         private void comboBoxFonts_SelectedIndexChanged(object sender, EventArgs e)
         {
-            numericUpDownCharacters.Maximum = DataSet.ImagesByFontFamily[comboBoxFonts.SelectedItem.ToString()].Count - 1;
+            setupCharacterSelectionMaximum();
             numericUpDownCharacters.Value = 0;
             selectCharacterImageFromDataset();
+        }
+
+        private void setupCharacterSelectionMaximum()
+        {
+            if (radioButtonAllData.Checked)
+                numericUpDownCharacters.Maximum = DataSet.ImagesByFontFamily[comboBoxFonts.SelectedItem.ToString()].Count - 1;
+            else if (radioButtonTestSet.Checked)
+                numericUpDownCharacters.Maximum = TestSet.ImagesByFontFamily[comboBoxFonts.SelectedItem.ToString()].Count - 1;
+            else if (radioButtonTrainingSet.Checked)
+                numericUpDownCharacters.Maximum = TrainingSet.ImagesByFontFamily[comboBoxFonts.SelectedItem.ToString()].Count - 1;
         }
 
         private void numericUpDownCharacters_ValueChanged(object sender, EventArgs e)
@@ -121,44 +155,78 @@ namespace CharacterRecognizer
             selectCharacterImageFromDataset();
         }
 
+        private void radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            comboBoxFonts.SelectedIndex = 0;
+            setupCharacterSelectionMaximum();
+            numericUpDownCharacters.Value = 0;
+            selectCharacterImageFromDataset();
+            updateDataStatisctics();
+        }
+
         private void selectCharacterImageFromDataset()
         {
             string fontFamily = comboBoxFonts.SelectedItem.ToString();
             int characterNumber = decimal.ToInt32(numericUpDownCharacters.Value);
-            if (DataSet != null && DataSet.ImagesByFontFamily.ContainsKey(fontFamily) && DataSet.ImagesByFontFamily[fontFamily].Count > characterNumber)
-                selectCharacterImage(DataSet.ImagesByFontFamily[fontFamily][characterNumber]);
+
+            if (radioButtonAllData.Checked)
+            {
+                if (DataSet != null && DataSet.ImagesByFontFamily.ContainsKey(fontFamily) && DataSet.ImagesByFontFamily[fontFamily].Count > characterNumber)
+                    selectCharacterImage(DataSet.ImagesByFontFamily[fontFamily][characterNumber]);
+            }
+            else if (radioButtonTestSet.Checked)
+            {
+                if (TestSet != null && TestSet.ImagesByFontFamily.ContainsKey(fontFamily) && TestSet.ImagesByFontFamily[fontFamily].Count > characterNumber)
+                    selectCharacterImage(TestSet.ImagesByFontFamily[fontFamily][characterNumber]);
+            }
+            else if (radioButtonTrainingSet.Checked)
+            {
+                if (TrainingSet != null && TrainingSet.ImagesByFontFamily.ContainsKey(fontFamily) && TrainingSet.ImagesByFontFamily[fontFamily].Count > characterNumber)
+                    selectCharacterImage(TrainingSet.ImagesByFontFamily[fontFamily][characterNumber]);
+            }
         }
 
         private void selectCharacterImage(CharacterImage image)
         {
             selectedCharacterImage = image;
             //Recognize Image
-            recognize(selectedCharacterImage);
+            recognize(image);
             
-            if (selectedCharacterImage != null)
+            if (image != null)
             {
                 //Display info
                 textBoxSelectedCharacterInfo.Text =
-                    "FontFamily: " + selectedCharacterImage.FontFamily + "\r\n" +
-                    "FontVariant: " + selectedCharacterImage.FontVariant + "\r\n" +
-                    "Label: " + selectedCharacterImage.Label + "\r\n" +
-                    "Italic: " + selectedCharacterImage.Italic + "\r\n" +
-                    "Strength: " + selectedCharacterImage.Strength + "\r\n";
+                    "FontFamily: " + image.FontFamily + "\r\n" +
+                    "FontVariant: " + image.FontVariant + "\r\n" +
+                    "Label: " + image.Label + "\r\n" +
+                    "Italic: " + image.Italic + "\r\n" +
+                    "Strength: " + image.Strength + "\r\n";
                 //Display Image
-                Bitmap bitmap = new Bitmap(selectedCharacterImage.Width, selectedCharacterImage.Height);
-                for (int y = 0; y < selectedCharacterImage.Height; y++)
-                    for (int x = 0; x < selectedCharacterImage.Width; x++)
+                Bitmap bitmap = new Bitmap(image.Width, image.Height);
+                for (int y = 0; y < image.Height; y++)
+                    for (int x = 0; x < image.Width; x++)
                     {
-                        int grayscaleValue = selectedCharacterImage.Pixels[y * selectedCharacterImage.Width + x];
+                        int grayscaleValue = image.Pixels[y * image.Width + x];
                         bitmap.SetPixel(x, y, Color.FromArgb(255, grayscaleValue, grayscaleValue, grayscaleValue));
                     }
-                pictureBox.Image = resizeBitmap(bitmap, selectedCharacterImage.Width * 8, selectedCharacterImage.Height * 8);
+                pictureBox.Image = resizeBitmap(bitmap, image.Width * 8, image.Height * 8);
             }
             else
             {
                 textBoxSelectedCharacterInfo.Text = "Cannot read character image.";
                 pictureBox.Image = null;
             }
+        }
+
+        private Bitmap resizeBitmap(Image original, int width, int height)
+        {
+            Bitmap resizedBmp = new Bitmap(width, height);
+            using (Graphics gr = Graphics.FromImage(resizedBmp))
+            {
+                gr.InterpolationMode = InterpolationMode.NearestNeighbor;
+                gr.DrawImage(original, new Rectangle(0, 0, width, height));
+            }
+            return resizedBmp;
         }
 
         private void recognize(CharacterImage image)
@@ -182,9 +250,6 @@ namespace CharacterRecognizer
             else
                 textBoxCustomRecognition.Text = "Custom Neural Network not created.";
         }
-
-
-
 
         private void buttonCreateCustomNetwork_Click(object sender, EventArgs e)
         {
@@ -212,5 +277,7 @@ namespace CharacterRecognizer
                     testNeuralNetwork(CustomNeuralNetwork);
             selectCharacterImage(selectedCharacterImage);
         }
+
+
     }
 }

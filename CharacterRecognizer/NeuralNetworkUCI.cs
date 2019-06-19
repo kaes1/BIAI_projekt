@@ -54,8 +54,7 @@ namespace CharacterRecognizer
                 double[] outputLayerGeneralizedDeltas = new double[outputLayer.Length];
                 for (int i = 0; i < outputLayer.Length; i++)
                 {
-                    double delta = 1.0 * (desiredOutputs[i] - outputLayer[i].Output) * outputLayer[i].Output * (1.0 - outputLayer[i].Output);
-                    outputLayerGeneralizedDeltas[i] = delta;
+                    outputLayerGeneralizedDeltas[i] = 1.0 * (desiredOutputs[i] - outputLayer[i].Output) * outputLayer[i].Output * (1.0 - outputLayer[i].Output);
                 }
                 //Calculate generalized deltas for hidden layer.
                 double[] hiddenLayerGeneralizedDeltas = new double[hiddenLayer.Length];
@@ -64,15 +63,16 @@ namespace CharacterRecognizer
                     double sum = 0.0;
                     for (int k = 0; k < outputLayer.Length; k++)
                         sum += outputLayerGeneralizedDeltas[k] * outputLayer[k].Weights[i];
-                    double delta = 1.0 * hiddenLayer[i].Output * (1 - hiddenLayer[i].Output) * sum;
-                    hiddenLayerGeneralizedDeltas[i] = delta;
+                    hiddenLayerGeneralizedDeltas[i] = 1.0 * hiddenLayer[i].Output * (1 - hiddenLayer[i].Output) * sum;
                 }
 
                 //Modify weights of output layer.
                 for (int i = 0; i < outputLayer.Length; i++)
                     outputLayer[i].ModifyWeights(Eta, outputLayerGeneralizedDeltas[i]);
+
                 //Modify weights of hidden layer.
-                for (int i = 0; i < hiddenLayer.Length; i++) ;
+                for (int i = 0; i < hiddenLayer.Length; i++)
+                    hiddenLayer[i].ModifyWeights(Eta, hiddenLayerGeneralizedDeltas[i]);
             }
         }
     }

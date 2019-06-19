@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CharacterRecognizer
 {
@@ -55,10 +51,7 @@ namespace CharacterRecognizer
         public void ModifyWeights(double eta, double generalizedDelta)
         {
             for (int j = 0; j < Weights.Length; j++)
-            {
-                double delta_w = eta * generalizedDelta * inputs[j];
-                Weights[j] += delta_w;
-            }
+                Weights[j] += eta * generalizedDelta * inputs[j];
             //Modify bias weight
             W_0 += eta * generalizedDelta * X_0;
         }

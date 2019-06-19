@@ -39,6 +39,9 @@
             this.textBoxDataSetStatistics = new System.Windows.Forms.TextBox();
             this.buttonLoadImageFromFile = new System.Windows.Forms.Button();
             this.groupBoxData = new System.Windows.Forms.GroupBox();
+            this.radioButtonTestSet = new System.Windows.Forms.RadioButton();
+            this.radioButtonTrainingSet = new System.Windows.Forms.RadioButton();
+            this.radioButtonAllData = new System.Windows.Forms.RadioButton();
             this.label9 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -48,6 +51,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.groupBoxCustomNN = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.numericUpDownLearningRateEta = new System.Windows.Forms.NumericUpDown();
@@ -86,7 +90,7 @@
             // textBoxPresetNeuralNetwork
             // 
             this.textBoxPresetNeuralNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxPresetNeuralNetwork.Location = new System.Drawing.Point(6, 49);
+            this.textBoxPresetNeuralNetwork.Location = new System.Drawing.Point(6, 45);
             this.textBoxPresetNeuralNetwork.Multiline = true;
             this.textBoxPresetNeuralNetwork.Name = "textBoxPresetNeuralNetwork";
             this.textBoxPresetNeuralNetwork.ReadOnly = true;
@@ -99,7 +103,7 @@
             this.comboBoxFonts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxFonts.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.comboBoxFonts.FormattingEnabled = true;
-            this.comboBoxFonts.Location = new System.Drawing.Point(14, 220);
+            this.comboBoxFonts.Location = new System.Drawing.Point(14, 241);
             this.comboBoxFonts.Name = "comboBoxFonts";
             this.comboBoxFonts.Size = new System.Drawing.Size(145, 21);
             this.comboBoxFonts.TabIndex = 19;
@@ -109,7 +113,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(11, 207);
+            this.label1.Location = new System.Drawing.Point(11, 228);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 15;
@@ -118,7 +122,7 @@
             // numericUpDownCharacters
             // 
             this.numericUpDownCharacters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDownCharacters.Location = new System.Drawing.Point(191, 221);
+            this.numericUpDownCharacters.Location = new System.Drawing.Point(191, 242);
             this.numericUpDownCharacters.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -139,13 +143,13 @@
             this.textBoxSelectedCharacterInfo.Size = new System.Drawing.Size(174, 158);
             this.textBoxSelectedCharacterInfo.TabIndex = 21;
             this.textBoxSelectedCharacterInfo.TabStop = false;
-            this.textBoxSelectedCharacterInfo.Text = "Character information.";
+            this.textBoxSelectedCharacterInfo.Text = "Loading...";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(188, 207);
+            this.label2.Location = new System.Drawing.Point(188, 228);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 15;
@@ -160,24 +164,24 @@
             this.textBoxPresetRecognition.ReadOnly = true;
             this.textBoxPresetRecognition.Size = new System.Drawing.Size(337, 158);
             this.textBoxPresetRecognition.TabIndex = 22;
-            this.textBoxPresetRecognition.Text = "Nothing yet.";
+            this.textBoxPresetRecognition.Text = "Loading...";
             // 
             // textBoxDataSetStatistics
             // 
             this.textBoxDataSetStatistics.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxDataSetStatistics.Location = new System.Drawing.Point(6, 47);
+            this.textBoxDataSetStatistics.Location = new System.Drawing.Point(6, 43);
             this.textBoxDataSetStatistics.Multiline = true;
             this.textBoxDataSetStatistics.Name = "textBoxDataSetStatistics";
             this.textBoxDataSetStatistics.ReadOnly = true;
             this.textBoxDataSetStatistics.Size = new System.Drawing.Size(338, 112);
             this.textBoxDataSetStatistics.TabIndex = 27;
             this.textBoxDataSetStatistics.TabStop = false;
-            this.textBoxDataSetStatistics.Text = "Statistics";
+            this.textBoxDataSetStatistics.Text = "Loading...";
             // 
             // buttonLoadImageFromFile
             // 
             this.buttonLoadImageFromFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.buttonLoadImageFromFile.Location = new System.Drawing.Point(84, 295);
+            this.buttonLoadImageFromFile.Location = new System.Drawing.Point(84, 312);
             this.buttonLoadImageFromFile.Name = "buttonLoadImageFromFile";
             this.buttonLoadImageFromFile.Size = new System.Drawing.Size(183, 33);
             this.buttonLoadImageFromFile.TabIndex = 28;
@@ -187,6 +191,9 @@
             // 
             // groupBoxData
             // 
+            this.groupBoxData.Controls.Add(this.radioButtonTestSet);
+            this.groupBoxData.Controls.Add(this.radioButtonTrainingSet);
+            this.groupBoxData.Controls.Add(this.radioButtonAllData);
             this.groupBoxData.Controls.Add(this.label9);
             this.groupBoxData.Controls.Add(this.label7);
             this.groupBoxData.Controls.Add(this.label8);
@@ -208,11 +215,49 @@
             this.groupBoxData.TabStop = false;
             this.groupBoxData.Text = "Data";
             // 
+            // radioButtonTestSet
+            // 
+            this.radioButtonTestSet.AutoSize = true;
+            this.radioButtonTestSet.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioButtonTestSet.Location = new System.Drawing.Point(270, 204);
+            this.radioButtonTestSet.Name = "radioButtonTestSet";
+            this.radioButtonTestSet.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonTestSet.TabIndex = 38;
+            this.radioButtonTestSet.Text = "Test Set";
+            this.radioButtonTestSet.UseVisualStyleBackColor = true;
+            this.radioButtonTestSet.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
+            // radioButtonTrainingSet
+            // 
+            this.radioButtonTrainingSet.AutoSize = true;
+            this.radioButtonTrainingSet.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioButtonTrainingSet.Location = new System.Drawing.Point(132, 204);
+            this.radioButtonTrainingSet.Name = "radioButtonTrainingSet";
+            this.radioButtonTrainingSet.Size = new System.Drawing.Size(82, 17);
+            this.radioButtonTrainingSet.TabIndex = 37;
+            this.radioButtonTrainingSet.Text = "Training Set";
+            this.radioButtonTrainingSet.UseVisualStyleBackColor = true;
+            this.radioButtonTrainingSet.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
+            // radioButtonAllData
+            // 
+            this.radioButtonAllData.AutoSize = true;
+            this.radioButtonAllData.Checked = true;
+            this.radioButtonAllData.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.radioButtonAllData.Location = new System.Drawing.Point(14, 204);
+            this.radioButtonAllData.Name = "radioButtonAllData";
+            this.radioButtonAllData.Size = new System.Drawing.Size(62, 17);
+            this.radioButtonAllData.TabIndex = 36;
+            this.radioButtonAllData.TabStop = true;
+            this.radioButtonAllData.Text = "All Data";
+            this.radioButtonAllData.UseVisualStyleBackColor = true;
+            this.radioButtonAllData.CheckedChanged += new System.EventHandler(this.radioButton_CheckedChanged);
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label9.Location = new System.Drawing.Point(43, 331);
+            this.label9.Location = new System.Drawing.Point(47, 348);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(264, 13);
             this.label9.TabIndex = 35;
@@ -232,7 +277,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label8.Location = new System.Drawing.Point(99, 270);
+            this.label8.Location = new System.Drawing.Point(99, 287);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(152, 20);
             this.label8.TabIndex = 33;
@@ -242,7 +287,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(115, 182);
+            this.label4.Location = new System.Drawing.Point(115, 178);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(120, 20);
             this.label4.TabIndex = 30;
@@ -252,7 +297,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(138, 24);
+            this.label3.Location = new System.Drawing.Point(138, 21);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(74, 20);
             this.label3.TabIndex = 29;
@@ -286,7 +331,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label5.Location = new System.Drawing.Point(156, 26);
+            this.label5.Location = new System.Drawing.Point(156, 23);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 20);
             this.label5.TabIndex = 31;
@@ -294,6 +339,7 @@
             // 
             // groupBoxCustomNN
             // 
+            this.groupBoxCustomNN.Controls.Add(this.label17);
             this.groupBoxCustomNN.Controls.Add(this.label16);
             this.groupBoxCustomNN.Controls.Add(this.label15);
             this.groupBoxCustomNN.Controls.Add(this.numericUpDownLearningRateEta);
@@ -317,11 +363,21 @@
             this.groupBoxCustomNN.TabStop = false;
             this.groupBoxCustomNN.Text = "Custom Neural Network";
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label17.Location = new System.Drawing.Point(116, 350);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(125, 13);
+            this.label17.TabIndex = 39;
+            this.label17.Text = "(These may take a while)";
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label16.Location = new System.Drawing.Point(115, 173);
+            this.label16.Location = new System.Drawing.Point(115, 165);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(119, 20);
             this.label16.TabIndex = 44;
@@ -331,7 +387,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label15.Location = new System.Drawing.Point(49, 294);
+            this.label15.Location = new System.Drawing.Point(49, 281);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(118, 16);
             this.label15.TabIndex = 43;
@@ -346,7 +402,7 @@
             0,
             0,
             131072});
-            this.numericUpDownLearningRateEta.Location = new System.Drawing.Point(184, 292);
+            this.numericUpDownLearningRateEta.Location = new System.Drawing.Point(184, 279);
             this.numericUpDownLearningRateEta.Name = "numericUpDownLearningRateEta";
             this.numericUpDownLearningRateEta.Size = new System.Drawing.Size(120, 22);
             this.numericUpDownLearningRateEta.TabIndex = 42;
@@ -375,13 +431,13 @@
             this.textBoxCustomRecognition.ReadOnly = true;
             this.textBoxCustomRecognition.Size = new System.Drawing.Size(337, 158);
             this.textBoxCustomRecognition.TabIndex = 32;
-            this.textBoxCustomRecognition.Text = "Nothing yet.";
+            this.textBoxCustomRecognition.Text = "Loading...";
             // 
             // buttonTrainCustomNetwork
             // 
             this.buttonTrainCustomNetwork.Enabled = false;
             this.buttonTrainCustomNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.buttonTrainCustomNetwork.Location = new System.Drawing.Point(184, 333);
+            this.buttonTrainCustomNetwork.Location = new System.Drawing.Point(184, 313);
             this.buttonTrainCustomNetwork.Name = "buttonTrainCustomNetwork";
             this.buttonTrainCustomNetwork.Size = new System.Drawing.Size(147, 33);
             this.buttonTrainCustomNetwork.TabIndex = 41;
@@ -392,7 +448,7 @@
             // buttonCreateCustomNetwork
             // 
             this.buttonCreateCustomNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.buttonCreateCustomNetwork.Location = new System.Drawing.Point(17, 333);
+            this.buttonCreateCustomNetwork.Location = new System.Drawing.Point(17, 313);
             this.buttonCreateCustomNetwork.Name = "buttonCreateCustomNetwork";
             this.buttonCreateCustomNetwork.Size = new System.Drawing.Size(147, 33);
             this.buttonCreateCustomNetwork.TabIndex = 40;
@@ -404,7 +460,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label12.Location = new System.Drawing.Point(49, 265);
+            this.label12.Location = new System.Drawing.Point(49, 253);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(115, 16);
             this.label12.TabIndex = 39;
@@ -414,7 +470,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label11.Location = new System.Drawing.Point(49, 236);
+            this.label11.Location = new System.Drawing.Point(49, 225);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(121, 16);
             this.label11.TabIndex = 38;
@@ -424,7 +480,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label10.Location = new System.Drawing.Point(49, 207);
+            this.label10.Location = new System.Drawing.Point(49, 197);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(108, 16);
             this.label10.TabIndex = 37;
@@ -434,7 +490,7 @@
             // 
             this.numericUpDownOutputLayerSize.Enabled = false;
             this.numericUpDownOutputLayerSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDownOutputLayerSize.Location = new System.Drawing.Point(184, 263);
+            this.numericUpDownOutputLayerSize.Location = new System.Drawing.Point(184, 251);
             this.numericUpDownOutputLayerSize.Name = "numericUpDownOutputLayerSize";
             this.numericUpDownOutputLayerSize.Size = new System.Drawing.Size(120, 22);
             this.numericUpDownOutputLayerSize.TabIndex = 36;
@@ -447,7 +503,7 @@
             // numericUpDownHiddenLayerSize
             // 
             this.numericUpDownHiddenLayerSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDownHiddenLayerSize.Location = new System.Drawing.Point(184, 234);
+            this.numericUpDownHiddenLayerSize.Location = new System.Drawing.Point(184, 223);
             this.numericUpDownHiddenLayerSize.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -466,7 +522,7 @@
             // 
             this.numericUpDownInputLayerSize.Enabled = false;
             this.numericUpDownInputLayerSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.numericUpDownInputLayerSize.Location = new System.Drawing.Point(184, 205);
+            this.numericUpDownInputLayerSize.Location = new System.Drawing.Point(184, 195);
             this.numericUpDownInputLayerSize.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -485,7 +541,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label6.Location = new System.Drawing.Point(156, 27);
+            this.label6.Location = new System.Drawing.Point(156, 24);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(37, 20);
             this.label6.TabIndex = 33;
@@ -494,7 +550,7 @@
             // textBoxCustomNeuralNetwork
             // 
             this.textBoxCustomNeuralNetwork.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxCustomNeuralNetwork.Location = new System.Drawing.Point(6, 50);
+            this.textBoxCustomNeuralNetwork.Location = new System.Drawing.Point(6, 46);
             this.textBoxCustomNeuralNetwork.Multiline = true;
             this.textBoxCustomNeuralNetwork.Name = "textBoxCustomNeuralNetwork";
             this.textBoxCustomNeuralNetwork.ReadOnly = true;
@@ -514,6 +570,7 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "CharacterRecognizer";
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCharacters)).EndInit();
             this.groupBoxData.ResumeLayout(false);
@@ -566,6 +623,10 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.RadioButton radioButtonTestSet;
+        private System.Windows.Forms.RadioButton radioButtonTrainingSet;
+        private System.Windows.Forms.RadioButton radioButtonAllData;
+        private System.Windows.Forms.Label label17;
     }
 }
 
